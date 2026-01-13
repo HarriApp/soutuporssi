@@ -1,1 +1,10 @@
-# soutuporssi
+# Soutupörssi
+
+* Sovelluksessa käyttäjät pystyvät etsimään miehistöä kirkkoveneisiinsä tulevan kesän Sulkavan Suursoutuihin. Ilmoituksessa lukee missä sarjassa ja milloin joukkue kilpailee sekä tarvittava soutajien määrä.
+* Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
+* Käyttäjä pystyy lisäämään ilmoituksia ja muokkaamaan ja poistamaan niitä.
+* Käyttäjä näkee sovellukseen lisätyt ilmoitukset.
+* Käyttäjä pystyy etsimään ilmoituksia sarjan ja soutupäivän perusteella.
+* Käyttäjä pystyy valitsemaan ilmoitukselle yhden tai useamman luokittelun (esim. sarja, soutukokemus).
+* Käyttäjä pystyy ilmoittautumaan miehistön jäseneksi. Ilmoituksessa näytetään, ketkä käyttäjät ovat ilmoittautuneet.
+* Käyttäjäsivu näyttää, montako ilmoitusta käyttäjä on lähettänyt, listan käyttäjän omista ilmoituksista, sekä muut venekunnat joihin käyttäjä on ilmoitautunut miehistön jäseneksi.
