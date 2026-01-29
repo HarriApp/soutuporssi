@@ -15,6 +15,7 @@
     <a href="/logout">Kirjaudu ulos</a>
   </p>
   {% else %}
+  <p>{{ message }}</p>
   <form action="/login" method="post">
     <p>
       Tunnus: <br />

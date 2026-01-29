@@ -13,44 +13,53 @@ app.secret_key = config.secret_key
 def index():
     return render_template("index.html")
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html", message="")
+    
+    if request.method == "POST":
+        username = request.form["username"]
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
 
-@app.route("/create", methods=["POST"])
-def create():
-    username = request.form["username"]
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
-    if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
-    password_hash = generate_password_hash(password1)
+        if password1 != password2:
+            message = "VIRHE: salasanat eivät ole samat. Yritä uudelleen."
+            return render_template("register.html", message=message)
+        password_hash = generate_password_hash(password1)
 
-    try:
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
-    except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
-
-    return "Tunnus luotu"
-
+        try:
+            sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
+            db.execute(sql, [username, password_hash])
+        except sqlite3.IntegrityError:
+            message = "VIRHE: tunnus on jo varattu. Yritä uudelleen."
+            return render_template("register.html", message=message)
+            
+        message = "Tunnus luotu"
+        return render_template("register.html", message=message)
+    
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("login.html", message="")
 
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
-        sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+        try:
+            sql = "SELECT password_hash FROM users WHERE username = ?"
+            password_hash = db.query(sql, [username])[0][0]
+        except IndexError:
+            message = "VIRHE: väärä tunnus tai salasana"
+            return render_template("login.html", message=message)
 
         if check_password_hash(password_hash, password):
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            message = "VIRHE: väärä tunnus tai salasana"
+            return render_template("login.html", message=message)
 
 @app.route("/logout")
 def logout():

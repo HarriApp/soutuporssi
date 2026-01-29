@@ -7,7 +7,9 @@
 
 <body>
   <h1>Soutupörssi</h1>
-  <form action="/create" method="post">
+  <p>{{ message }}</p>
+  {% if message != "Tunnus luotu" %}
+  <form action="/register" method="post">
     <p>
       Tunnus: <br />
       <input type="text" name="username" />
@@ -22,6 +24,11 @@
     </p>
     <input type="submit" value="Luo tunnus" />
   </form>
+  {% else %}
+  <p>
+    Kirjaudu sisään <a href="/login">täältä</a>.
+  </p>
+  {% endif %}
 </body>
 
 </html>
