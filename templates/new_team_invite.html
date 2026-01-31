@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Uusi ilmoitus</title>
+</head>
+
+<body>
+  <h1>Soutupörssi</h1>
+  <h2>Uusi ilmoitus</h2>
+  <p>{{ message }}</p>
+  <form action="/new_team_invite" method="post">
+    <p>
+      Soutumatka ja -sarja: <br />
+      <select name="serie_id">
+        <option value="1">Elämysreitti 15 km, Pe 10.7.2026</option>
+        <option value="2">Elämysreitti 15 km, La 11.7.2026</option>
+        <option value="3">Elämysreitti 25 km, Pe 10.7.2026</option>
+        <option value="4">Elämysreitti 25 km, La 11.7.2026</option>
+        <option value="5">Elämysreitti 35 km, La 11.7.2026</option>
+        <option value="6">Retkisoutu 70 km, 1. lähtö, To 09.7.2026</option>
+        <option value="7">Retkisoutu 70 km, 2. lähtö, La 11.7.2026</option>
+        <option value="8">Kuningasmatka 60km, Iltasoutu, Pe 10.7.2026</option>
+        <option value="9">Kuningasmatka 60km, Päiväsoutu, La 11.7.2026</option>
+      </select>
+    </p>
+    <p>
+      Joukkue: <br />
+      <input type="text" name="team_name" />
+    </p>
+    <p>
+      Joukkueen kuvaus: <br />
+      <textarea name="description" rows="8" cols="60"></textarea>
+    </p>
+    <input type="submit" value="Luo ilmoitus" />
+  </form>
+</body>
+
+</html>
