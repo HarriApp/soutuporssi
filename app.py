@@ -13,10 +13,10 @@ app.secret_key = config.secret_key
 def index():
     return render_template("index.html")
 
-@app.route("/new_team_invite", methods=["GET", "POST"])
+@app.route("/create_team", methods=["GET", "POST"])
 def new_invite():
     if request.method == "GET":
-        return render_template("new_team_invite.html", message="")
+        return render_template("create_team.html", message="")
     
     if request.method == "POST":
         series = request.form["serie_id"]
@@ -28,10 +28,10 @@ def new_invite():
             db.execute(sql, [series, session["user_id"], team_name, description])
         except sqlite3.IntegrityError:
             message = "VIRHE: Joukkue on jo ilmoittautunut tähän lähtöön"
-            return render_template("new_team_invite.html", message=message)
+            return render_template("create_team.html", message=message)
             
         # message = "Joukkuekutsu luotu. Tsemppiä kisaan!"
-        # return render_template("new_team_invite.html", message=message)
+        # return render_template("create_team.html", message=message)
 
         return redirect("/")
 
