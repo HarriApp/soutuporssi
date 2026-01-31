@@ -2,9 +2,11 @@
 from flask import Flask
 from flask import render_template, request, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
 import config
 import db
-import sqlite3
+import team
+
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -22,16 +24,13 @@ def new_invite():
         series = request.form["serie_id"]
         team_name = request.form["team_name"]
         description = request.form["description"]
+        captain = session["user_id"]
+
+        success = team.create(team_name, captain, series, description)
         
-        try:
-            sql = "INSERT INTO teams (serie_id, user_id, name, description) VALUES (?, ?, ?, ?)"
-            db.execute(sql, [series, session["user_id"], team_name, description])
-        except sqlite3.IntegrityError:
+        if not success:
             message = "VIRHE: Joukkue on jo ilmoittautunut tähän lähtöön"
             return render_template("create_team.html", message=message)
-            
-        # message = "Joukkuekutsu luotu. Tsemppiä kisaan!"
-        # return render_template("create_team.html", message=message)
 
         return redirect("/")
 
