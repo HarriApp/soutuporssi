@@ -18,5 +18,6 @@ CREATE TABLE teams (
     name TEXT,
     boat_capacity INTEGER,
     description TEXT,
+    active INTEGER DEFAULT 1,
     UNIQUE (serie_id, name)
 );

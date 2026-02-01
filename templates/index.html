@@ -20,6 +20,15 @@
     <a href="/login">Kirjaudu sisään</a>
   </p>
   {% endif %}
+  <h2>Joukkueet</h2>
+  <ul>
+    {% for team in teams %}
+    <li><a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
+    {% endfor %}
+  </ul>
+  {% if not teams %}
+  <p>Ei vielä yhtään joukkuetta.</p>
+  {% endif %}
 </body>
 
 </html>

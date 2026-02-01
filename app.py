@@ -13,7 +13,8 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    teams = team.get_teams()
+    return render_template("index.html", teams=teams)
 
 @app.route("/create_team", methods=["GET", "POST"])
 def new_invite():
@@ -33,6 +34,17 @@ def new_invite():
             return render_template("create_team.html", message=message)
 
         return redirect("/")
+    
+@app.route("/team/<int:team_id>")
+def show_team(team_id):
+    sql = '''SELECT T.name, T.description, S.description AS serie_description,
+             U.username AS captain
+             FROM teams T LEFT JOIN series S ON T.serie_id = S.id
+             LEFT JOIN users U ON T.user_id = U.id  
+             WHERE T.id = ?'''
+    team = db.query(sql, [team_id])[0]
+
+    return render_template("show_team.html", team=team)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
