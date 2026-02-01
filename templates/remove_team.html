@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Poista joukkue</title>
+</head>
+
+<body>
+  <h1>Soutupörssi</h1>
+  <h2>Poista joukkue</h2>
+  <form action="/remove_team/{{ team.id }}" method="post">
+    <p>
+      Haluatko varmasti poistaa joukkueen <i>{{ team.name }}</i> lähdöstä <i>
+      {{ team.serie_description }}</i>?<br />
+    </p>
+    
+    <input type="submit" name="cancel" value="Peruuta" /> 
+    <input type="submit" name="remove" value="Poista joukkue" />
+  </form>
+</body>
+
+</html>

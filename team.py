@@ -1,4 +1,5 @@
 import db
+from werkzeug.security import generate_password_hash
 
 def create(name, captain_user_id, serie_id,  description):
     sql = '''INSERT INTO teams (name, user_id, serie_id, description)
@@ -27,3 +28,8 @@ def update(team_id, name, serie_id, description):
              WHERE id=?'''
     db.execute(sql, [name, serie_id, description, team_id])
 
+def remove(team_id):
+    name_hash = generate_password_hash(f"{team_id} of team to be removed")
+    sql = '''UPDATE teams SET name=?, active=0
+             WHERE id=?'''
+    db.execute(sql, [name_hash, team_id])

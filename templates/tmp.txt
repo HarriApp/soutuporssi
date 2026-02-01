@@ -1,8 +1,0 @@
-
-
-CREATE TABLE crews (
-    id INTEGER PRIMARY KEY,
-    team_id INTEGER REFERENCES teams,
-    member_name TEXT,
-    member_info TEXT
-);

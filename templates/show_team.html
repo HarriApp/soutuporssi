@@ -13,6 +13,7 @@
   <br>
   {% if session.user_id == team.captain_id %}
   <a href="/edit_team/{{ team.id }}">Muokkaa</a>
+  <a href="/remove_team/{{ team.id }}">Poista</a>
   {% endif %}
   <a href="/">Takaisin etusivulle</a>
 </body>
