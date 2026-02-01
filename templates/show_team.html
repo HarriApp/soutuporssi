@@ -11,6 +11,9 @@
   <p>{{ team.description }}</p>
   <p>Kapteeni: {{ team.captain }}</p>
   <br>
+  {% if session.user_id == team.captain_id %}
+  <a href="/edit_team/{{ team.id }}">Muokkaa</a>
+  {% endif %}
   <a href="/">Takaisin etusivulle</a>
 </body>
 

@@ -41,6 +41,37 @@ def show_team(team_id):
 
     return render_template("show_team.html", team=team_details)
 
+@app.route("/edit_team/<int:team_id>", methods=["GET", "POST"])
+def edit_team(team_id):
+    if request.method == "GET":
+        team_details = team.get_team_by_id(team_id)
+        return render_template("edit_team.html", team=team_details, message="")
+
+    if request.method == "POST":
+        series = request.form["serie_id"]
+        team_name = request.form["team_name"]
+        description = request.form["description"]
+
+        try:
+            team.update(team_id, team_name, series, description)
+        except sqlite3.IntegrityError:
+            message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
+            team_details = team.get_team_by_id(team_id)
+            return render_template("edit_team.html", team=team_details, message=message)
+
+        return redirect(f"/team/{team_id}")
+    
+# pp.route("/update_team/<int:team_id>", methods=["POST"])
+# f update_team(team_id):
+#   description = request.form["description"]
+#   team_name = request.form["team_name"]
+#   serie_id = request.form["serie_id"]#
+#
+#   sql = '''UPDATE teams SET name=?, description=?, serie_id=? WHERE id=?'''
+#   db.execute(sql, [team_name, description, serie_id, team_id])#
+#
+#   return redirect(f"/team/{team_id}")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
