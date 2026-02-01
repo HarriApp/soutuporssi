@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Etsi joukkueita</title>
+</head>
+
+<body>
+  <h1>Soutupörssi</h1>
+  <h2>Etsi joukkueita</h2>
+  <form action="/find_team" method="get">
+    <p>
+      Hakusana: <input type="text" name="query" value="{{ query }}" />
+    </p>
+    <input type="submit" value="Etsi" />
+  </form>
+  {% if query %}
+  <h2>Tulokset</h2>
+    <ul>
+    {% for team in results %}
+    <li><a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <a href="/">Takaisin etusivulle</a>
+</body>
+
+</html>

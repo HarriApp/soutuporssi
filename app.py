@@ -34,7 +34,17 @@ def new_invite():
             return render_template("create_team.html", message=message)
 
         return redirect("/")
-    
+
+@app.route("/find_team")
+def find_team():
+    query = request.args.get("query")
+    if query:
+        results = team.search_teams(query)
+    else:
+        results = []
+        query = ""
+    return render_template("find_team.html", query=query, results=results)
+
 @app.route("/team/<int:team_id>")
 def show_team(team_id):
     team_details = team.get_team_by_id(team_id)
