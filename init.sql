@@ -1,3 +1,5 @@
+
+--- Initialize series data
 INSERT INTO series (description, start_time, distance) VALUES
 ('Elämysreitti 15 km, Pe 10.7.2026', '2026-07-10 10:00:00', 15);
 
@@ -24,3 +26,8 @@ VALUES ('Kuningasmatka 60km, Iltasoutu, Pe 10.7.2026', '2026-07-10 18:00:00', 60
 
 INSERT INTO series (description, start_time, distance) VALUES
 ('Kuningasmatka 60km, Päiväsoutu, La 11.7.2026', '2026-07-11 12:00:00', 60);
+
+--- Create user without username to prevent sqlite crashing on empty database
+--- and pervent real user register with empty username
+INSERT INTO USERS (id, username, password_hash) VALUES
+(0, '', 'scrypt:32768:8:1$xxxx');

@@ -26,10 +26,10 @@ def new_invite():
         description = request.form["description"]
         captain = session["user_id"]
 
-        success = team.create(team_name, captain, series, description)
-        
-        if not success:
-            message = "VIRHE: Joukkue on jo ilmoittautunut tähän lähtöön"
+        try:
+            team.create(team_name, captain, series, description)
+        except sqlite3.IntegrityError:
+            message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
             return render_template("create_team.html", message=message)
 
         return redirect("/")
@@ -73,8 +73,8 @@ def login():
             result = db.query(sql, [username])[0]
             user_id = result["id"]
             password_hash = result["password_hash"]
-        except:
-            message = "VIRHE: Tunnusta ei löydy. Yritä uudelleen."
+        except IndexError:
+            message = "VIRHE: Tunnusta ei ole olemassa"
             return render_template("login.html", message=message)
 
         if check_password_hash(password_hash, password):
@@ -82,7 +82,7 @@ def login():
             session["user_id"] = user_id
             return redirect("/")
         else:
-            message = "VIRHE: väärä tunnus tai salasana"
+            message = "VIRHE: Virheellinen tunnus tai salasana"
             return render_template("login.html", message=message)
 
 @app.route("/logout")
