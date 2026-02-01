@@ -37,7 +37,7 @@ def remove(team_id):
 def search_teams(query):
     sql = '''SELECT T.id, T.name, S.description
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
-             WHERE T.active = 1 AND (T.name LIKE ? OR S.description LIKE ?)
+             WHERE T.active = 1 AND (T.name LIKE ? OR T.description LIKE ?)
              ORDER BY T.id DESC'''
     query = "%" + query + "%"
     return db.query(sql, [query, query])

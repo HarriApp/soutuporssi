@@ -18,9 +18,12 @@
   <h2>Tulokset</h2>
     <ul>
     {% for team in results %}
-    <li><a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
+      <li><a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
     {% endfor %}
-  </ul>
+    {% if not results %}
+      <li>Yhtään joukkuetta ei löytynyt</li>
+    {% endif %}
+    </ul>
   {% endif %}
   <a href="/">Takaisin etusivulle</a>
 </body>
