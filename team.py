@@ -6,22 +6,25 @@ def create(name, captain_user_id, serie_id,  description):
              VALUES (?, ?, ?, ?)'''
     db.execute(sql, [name, captain_user_id, serie_id, description])
 
-def get_teams():
+def get_all():
     sql = '''SELECT T.id, T.name, S.description
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
              WHERE T.active = 1
              ORDER BY T.id DESC'''
     return db.query(sql)
 
-def get_team_by_id(team_id):
-    sql = '''SELECT T.id, T.name, T.description, S.description AS
-             serie_description, U.username AS captain, U.id AS captain_id
+def get_by_id(team_id):
+    sql = '''SELECT T.id AS id, T.name AS name, T.description AS description,
+             T.serie_id AS serie_id, S.description AS serie_description,
+             U.username AS captain, U.id AS captain_id
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
              LEFT JOIN users U ON T.user_id = U.id  
              WHERE T.id = ?'''
-    result = db.query(sql, [team_id])
-  
-    return result[0]
+    return db.query(sql, [team_id])[0]
+
+def is_name_available(name, serie_id):
+    sql = '''SELECT id FROM teams WHERE name = ? AND serie_id = ?'''
+    return len(db.query(sql, [name, serie_id])) == 0
 
 def update(team_id, name, serie_id, description):
     sql = '''UPDATE teams SET name=?, serie_id=?, description=?
@@ -34,10 +37,9 @@ def remove(team_id):
              WHERE id=?'''
     db.execute(sql, [name_hash, team_id])
 
-def search_teams(query):
+def search(query):
     sql = '''SELECT T.id, T.name, S.description
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
              WHERE T.active = 1 AND (T.name LIKE ? OR T.description LIKE ?)
              ORDER BY T.id DESC'''
-    query = "%" + query + "%"
-    return db.query(sql, [query, query])
+    return db.query(sql, ["%" + query + "%", query])

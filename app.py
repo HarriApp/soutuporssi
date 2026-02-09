@@ -1,11 +1,9 @@
 
 from flask import Flask
 from flask import render_template, request, redirect, session
-from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
 import config
-import db
 import team
+import user
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -24,12 +22,12 @@ def new_invite():
         if "cancel" in request.form:
             return redirect("/")
         
-        serie_id = request.form["serie_id"]
+        serie_id = int(request.form["serie_id"])
         team_name = request.form["team_name"].strip()
         description = request.form["description"].strip()
         captain = session["user_id"]
 
-        if not team.is_name_free_in_serie(team_name, serie_id):
+        if not team.is_name_available(team_name, serie_id):
             message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
             return render_template("create_team.html", message=message)
         
@@ -60,18 +58,21 @@ def edit_team(team_id):
     if request.method == "POST":
         if "cancel" in request.form:
             return redirect("/")
-        
-        serie_id = request.form["serie_id"]
-        name = request.form["team_name"].strip()
-        description = request.form["description"].strip()
 
-        if not team.is_name_free_in_serie(name, serie_id):
+        old_team_details = team.get_by_id(team_id)   
+        new_serie_id = int(request.form["serie_id"])
+        new_name = request.form["team_name"].strip()
+        new_description = request.form["description"].strip()
+
+        name_or_serie_changed = new_name != old_team_details["name"] or \
+                                new_serie_id != old_team_details["serie_id"]
+        if (name_or_serie_changed and not
+            team.is_name_available(new_name, new_serie_id)):
             message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
-            team_details = team.get_by_id(team_id)
-            return render_template("edit_team.html", team=team_details,
+            return render_template("edit_team.html", team=old_team_details,
                                    message=message)
 
-        team.update(team_id, name, serie_id, description)
+        team.update(team_id, new_name, new_serie_id, new_description)
         return redirect(f"/team/{team_id}")
     
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])
@@ -99,18 +100,15 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 
+        if not user.is_username_available(username):
+            message = "VIRHE: Tunnus on jo varattu. Yritä uudelleen."
+            return render_template("register.html", message=message)
+
         if password1 != password2:
             message = "VIRHE: salasanat eivät ole samat. Yritä uudelleen."
             return render_template("register.html", message=message)
-        password_hash = generate_password_hash(password1)
 
-        try:
-            sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-            db.execute(sql, [username, password_hash])
-        except sqlite3.IntegrityError:
-            message = "VIRHE:Tunnus on jo varattu. Yritä uudelleen."
-            return render_template("register.html", message=message)
-            
+        user.register(username, password1)          
         message = "Tunnus luotu"
         return render_template("register.html", message=message)
     
@@ -122,25 +120,18 @@ def login():
     if request.method == "POST":
         if "cancel" in request.form:
             return redirect("/")
+        
         username = request.form["username"]
         password = request.form["password"]
+        user_id = user.login(username, password)
 
-        try:
-            sql = "SELECT id, password_hash FROM users WHERE username = ?"
-            result = db.query(sql, [username])[0]
-            user_id = result["id"]
-            password_hash = result["password_hash"]
-        except IndexError:
-            message = "VIRHE: Tunnusta ei ole olemassa"
-            return render_template("login.html", message=message)
-
-        if check_password_hash(password_hash, password):
-            session["username"] = username
-            session["user_id"] = user_id
-            return redirect("/")
-        else:
+        if not user_id:
             message = "VIRHE: Virheellinen tunnus tai salasana"
             return render_template("login.html", message=message)
+            
+        session["user_id"] = user_id
+        session["username"] = username
+        return redirect("/")
 
 @app.route("/logout")
 def logout():
