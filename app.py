@@ -59,17 +59,19 @@ def edit_team(team_id):
         if "cancel" in request.form:
             return redirect("/")
 
-        old_team_details = team.get_by_id(team_id)   
+        team_details = team.get_by_id(team_id)   
         new_serie_id = int(request.form["serie_id"])
         new_name = request.form["team_name"].strip()
         new_description = request.form["description"].strip()
 
-        name_or_serie_changed = new_name != old_team_details["name"] or \
-                                new_serie_id != old_team_details["serie_id"]
+        name_or_serie_changed = new_name != team_details.name or \
+                                new_serie_id != team_details.serie_id
         if (name_or_serie_changed and not
             team.is_name_available(new_name, new_serie_id)):
-            message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
-            return render_template("edit_team.html", team=old_team_details,
+            message = f"VIRHE: Nimi {new_name} on jo käytössä tässä sarjassa"
+            team_details.serie_id = new_serie_id
+            team_details.description = new_description
+            return render_template("edit_team.html", team=team_details,
                                    message=message)
 
         team.update(team_id, new_name, new_serie_id, new_description)
@@ -96,9 +98,14 @@ def register():
         if "cancel" in request.form:
             return redirect("/")
 
-        username = request.form["username"]
+        username = request.form["username"].strip()
         password1 = request.form["password1"]
         password2 = request.form["password2"]
+
+        if len(username) < 2:
+            message = "VIRHE: Tunnuksen vähimmäispituus on kaksi merkkiä. "
+            message += "Tyhjää tilaa tunnksen alussa ja lopussa ei huomioida."
+            return render_template("register.html", message=message)
 
         if not user.is_username_available(username):
             message = "VIRHE: Tunnus on jo varattu. Yritä uudelleen."
@@ -121,7 +128,7 @@ def login():
         if "cancel" in request.form:
             return redirect("/")
         
-        username = request.form["username"]
+        username = request.form["username"].strip()
         password = request.form["password"]
         user_id = user.login(username, password)
 

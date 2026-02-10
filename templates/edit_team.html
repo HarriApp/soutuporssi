@@ -12,7 +12,7 @@
   <form action="/edit_team/{{ team.id }}" method="post">
     <p>
       Soutumatka ja -sarja: <br />
-      <select name="serie_id">
+      <select name="serie_id" required>
         <option value=1>Elämysreitti 15 km, Pe 10.7.2026</option>
         <option value=2>Elämysreitti 15 km, La 11.7.2026</option>
         <option value=3>Elämysreitti 25 km, Pe 10.7.2026</option>
@@ -26,7 +26,7 @@
     </p>
     <p>
       Joukkue: <br />
-      <input type="text" name="team_name" value="{{ team.name }}"/>
+      <input type="text" name="team_name" value="{{ team.name }}" required/>
     </p>
     <p>
       Joukkueen kuvaus: <br />
