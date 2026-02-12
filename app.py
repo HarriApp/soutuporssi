@@ -1,6 +1,6 @@
 
 from flask import Flask
-from flask import render_template, request, redirect, session
+from flask import abort, render_template, request, redirect, session
 import config
 import teams
 import users
@@ -56,7 +56,10 @@ def edit_team(team_id):
         if "cancel" in request.form:
             return redirect("/")
 
-        team_details = teams.get_team_by_id(team_id)   
+        team_details = teams.get_team_by_id(team_id)
+        if team_details.captain_id != session["user_id"]:
+            abort(403)
+        
         new_serie_id = int(request.form["serie_id"])
         new_name = request.form["team_name"].strip()
         new_description = request.form["description"].strip()
@@ -76,13 +79,17 @@ def edit_team(team_id):
     
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])
 def remove_team(team_id):
+    team_details = teams.get_team_by_id(team_id)
+
     if request.method == "GET":
-        team_details = teams.get_team_by_id(team_id)
         return render_template("remove_team.html", team=team_details)
 
     if request.method == "POST":
         if "cancel" in request.form:
             return redirect(f"/team/{team_id}")
+        if team_details.captain_id != session["user_id"]:
+            abort(403)
+
         teams.remove_team(team_id)
         return redirect("/")
 
