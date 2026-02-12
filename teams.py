@@ -42,7 +42,10 @@ def get_team_by_id(team_id):
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
              LEFT JOIN users U ON T.user_id = U.id  
              WHERE T.id = ?'''
-    team = db.query(sql, [team_id])[0]
+    result = db.query(sql, [team_id])
+    if not result:
+        return None
+    team = result[0]
     return Team(team["id"], team["name"], team["description"],
                 team["serie_id"], team["serie_description"], team["captain"],
                 team["captain_id"])

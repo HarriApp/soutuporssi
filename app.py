@@ -43,35 +43,39 @@ def find_team():
 
 @app.route("/team/<int:team_id>")
 def show_team(team_id):
-    team_details = teams.get_team_by_id(team_id)
-    return render_template("show_team.html", team=team_details)
+    team = teams.get_team_by_id(team_id)
+    if not team:
+        abort(404)
+    return render_template("show_team.html", team=team)
 
 @app.route("/edit_team/<int:team_id>", methods=["GET", "POST"])
 def edit_team(team_id):
+    team = teams.get_team_by_id(team_id)
+    if not team:
+        abort(404)
+
     if request.method == "GET":
-        team_details = teams.get_team_by_id(team_id)
-        return render_template("edit_team.html", team=team_details, message="")
+        return render_template("edit_team.html", team=team, message="")
 
     if request.method == "POST":
         if "cancel" in request.form:
             return redirect("/")
-
-        team_details = teams.get_team_by_id(team_id)
-        if team_details.captain_id != session["user_id"]:
+        if team.captain_id != session["user_id"]:
             abort(403)
-        
+
         new_serie_id = int(request.form["serie_id"])
         new_name = request.form["team_name"].strip()
         new_description = request.form["description"].strip()
 
-        name_or_serie_changed = new_name != team_details.name or \
-                                new_serie_id != team_details.serie_id
+        name_or_serie_changed = new_name != team.name or \
+        new_serie_id != team.serie_id
+
         if (name_or_serie_changed and not
             teams.is_name_available(new_name, new_serie_id)):
             message = f"VIRHE: Nimi {new_name} on jo käytössä tässä sarjassa"
-            team_details.serie_id = new_serie_id
-            team_details.description = new_description
-            return render_template("edit_team.html", team=team_details,
+            team.serie_id = new_serie_id
+            team.description = new_description
+            return render_template("edit_team.html", team=team,
                                    message=message)
 
         teams.update_team(team_id, new_name, new_serie_id, new_description)
@@ -79,15 +83,17 @@ def edit_team(team_id):
     
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])
 def remove_team(team_id):
-    team_details = teams.get_team_by_id(team_id)
+    team = teams.get_team_by_id(team_id)
+    if not team:
+        abort(404)
 
     if request.method == "GET":
-        return render_template("remove_team.html", team=team_details)
+        return render_template("remove_team.html", team=team)
 
     if request.method == "POST":
         if "cancel" in request.form:
             return redirect(f"/team/{team_id}")
-        if team_details.captain_id != session["user_id"]:
+        if team.captain_id != session["user_id"]:
             abort(403)
 
         teams.remove_team(team_id)
