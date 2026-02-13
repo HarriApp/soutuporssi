@@ -1,4 +1,5 @@
 import db
+from flask import abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def is_username_available(username):
@@ -22,3 +23,7 @@ def login(username, password):
             return None
     except IndexError:
         return None
+
+def require_login():
+    if "user_id" not in session:
+        abort(403)

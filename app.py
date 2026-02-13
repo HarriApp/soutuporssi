@@ -15,6 +15,8 @@ def index():
 
 @app.route("/create_team", methods=["GET", "POST"])
 def new_invite():
+    users.require_login()
+
     if request.method == "GET":
         return render_template("create_team.html", message="")
     
@@ -50,6 +52,8 @@ def show_team(team_id):
 
 @app.route("/edit_team/<int:team_id>", methods=["GET", "POST"])
 def edit_team(team_id):
+    users.require_login()
+
     team = teams.get_team_by_id(team_id)
     if not team:
         abort(404)
@@ -83,6 +87,8 @@ def edit_team(team_id):
     
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])
 def remove_team(team_id):
+    users.require_login()
+
     team = teams.get_team_by_id(team_id)
     if not team:
         abort(404)
@@ -149,5 +155,7 @@ def login():
 
 @app.route("/logout")
 def logout():
+    users.require_login()
+    del session["user_id"]
     del session["username"]
     return redirect("/")
