@@ -13,6 +13,14 @@ def index():
     all_teams = teams.get_all_teams()
     return render_template("index.html", teams=all_teams)
 
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    teams = users.get_teams(user_id)
+    return render_template("show_user.html", user=user, teams=teams)
+
 @app.route("/create_team", methods=["GET", "POST"])
 def new_invite():
     users.require_login()

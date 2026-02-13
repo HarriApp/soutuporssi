@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Käyttäjä {{ user.username }}</title>
+</head>
+
+<body>
+  <h1>Käyttäjä {{ user.username }}</h1>
+  <p>{{ user.username }} toimii kapteenina {{ teams | count }} joukkueessa:</p>
+  <ul>
+    {% for team in teams %}
+      <li><a href="/team/{{ team.team_id }}">{{ team.team_name }}</a>
+          ({{ team.serie_name }})</li>
+    {% endfor %}
+  </ul>
+  <p>
+    <a href="/">Takaisin etusivulle</a>
+  </p>
+</body>
+
+</html>

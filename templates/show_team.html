@@ -9,7 +9,7 @@
   <h1>{{ team.name }}</h1>
   <p><i>{{ team.serie_description }}</i></p>
   <p>{{ team.description }}</p>
-  <p>Kapteeni: {{ team.captain }}</p>
+  <p>Kapteeni: <a href="/user/{{ team.captain_id }}">{{ team.captain }}</a></p>
   <br>
   {% if session.user_id == team.captain_id %}
   <a href="/edit_team/{{ team.id }}">Muokkaa</a>
