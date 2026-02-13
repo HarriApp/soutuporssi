@@ -26,6 +26,9 @@ def new_invite():
         description = request.form["description"].strip()
         captain = session["user_id"]
 
+        if len(team_name) < 1 or len(team_name) > 50 or len(description) > 480: 
+            abort(403)        
+
         if not teams.is_name_available(team_name, serie_id):
             message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
             return render_template("create_team.html", message=message)
@@ -71,8 +74,12 @@ def edit_team(team_id):
         new_name = request.form["team_name"].strip()
         new_description = request.form["description"].strip()
 
-        name_or_serie_changed = new_name != team.name or \
-        new_serie_id != team.serie_id
+        if (len(new_name) < 1 or len(new_name) > 50 or
+            len(new_description) > 480): 
+            abort(403)
+
+        name_or_serie_changed = (new_name != team.name or
+                                 new_serie_id != team.serie_id)
 
         if (name_or_serie_changed and not
             teams.is_name_available(new_name, new_serie_id)):
@@ -119,6 +126,9 @@ def register():
             message = "VIRHE: Tunnuksen vähimmäispituus on kaksi merkkiä. "
             message += "Tyhjää tilaa tunnksen alussa ja lopussa ei huomioida."
             return render_template("register.html", message=message)
+        
+        if len(username) > 20:
+            abort(403)
 
         if not users.is_username_available(username):
             message = "VIRHE: Tunnus on jo varattu. Yritä uudelleen."

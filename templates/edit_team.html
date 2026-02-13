@@ -26,11 +26,11 @@
     </p>
     <p>
       Joukkue: <br />
-      <input type="text" name="team_name" value="{{ team.name }}" required/>
+      <input type="text" name="team_name" value="{{ team.name }}" required maxlength="50"/>
     </p>
     <p>
       Joukkueen kuvaus: <br />
-      <textarea name="description" rows="8" cols="60">{{ team.description }}</textarea>
+      <textarea name="description" rows="8" cols="60" maxlength="480">{{ team.description }}</textarea>
     </p>
     <input type="submit" value="Päivitä ilmoitus" />
     <input type="submit" name="cancel" value="Peruuta" /> 
