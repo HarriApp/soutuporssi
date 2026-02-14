@@ -11,7 +11,7 @@
   <p>{{ message }}</p>
   <form action="/create_team" method="post">
     <p>
-      Soutumatka ja -sarja: <br />
+      Soutumatka ja -sarja (*): <br />
       <select name="serie_id" required>
         <option value=1>Elämysreitti 15 km, Pe 10.7.2026</option>
         <option value=2>Elämysreitti 15 km, La 11.7.2026</option>
@@ -25,12 +25,62 @@
       </select>
     </p>
     <p>
-      Joukkue: <br />
+      Joukkue (*): <br />
       <input type="text" name="team_name" required maxlength="50"/>
     </p>
     <p>
       Joukkueen kuvaus: <br />
       <textarea name="description" rows="8" cols="60" maxlength="480"></textarea>
+    </p>
+      Veneen koko (*): <br />
+      <select name="boat_size" required>
+        <option value=15>14 soutajaa + perämies</option>
+        <option value=11>10 soutajaa + perämies</option>
+        <option value=9>8 soutajaa + perämies</option>
+      </select>
+    </p>
+    </p>
+      Veneen tyyppi: <br />
+      <select name="boat_type">
+        <option value=''>Ei määritetty</option>
+        <option value='moving seats'>Liikkuvapenkkinen kilpavene</option>
+        <option value='fixed seats'>Kiinteäpenkkinen retkivene</option>
+      </select>
+    </p>
+    </p>
+      Veneen kunto: <br />
+      <select name="boat_condition">
+        <option value=''>Ei määritetty</option>
+        <option value='A'>Hyvä</option>
+        <option value='B'>Perus</option>
+        <option value='C'>Huono</option>
+      </select>
+    </p>
+    </p>
+      Tavoiteaika: <br />
+      <select name="target_time">
+        <option value=''>Ei määritetty</option>
+        <option value='4.0'>4h</option>
+        <option value='4.25'>4h 15min</option>
+        <option value='4.5'>4h 30min</option>
+        <option value='4.75'>4h 45min</option>
+        <option value='5.0'>5h </option>
+        <option value='5.5'>5h 30min</option>
+        <option value='6.0'>6h</option>
+        <option value='7.0'>7h</option>
+      </select>
+    </p>
+        </p>
+      Tunnelma veneessä: <br />
+      <select name="mood_in_boat">
+        <option value=''>Ei määritetty</option>
+        <option value='Fun'>Kevyt</option>
+        <option value='Heavy'>Raskas</option>
+        <option value='Tense'>Kireä</option>
+        <option value='Free'>Vapaamielinen</option>
+        <option value='Strict'>Harras</option>
+        <option value='Instabile'>Vaihteleva</option>
+      </select>
     </p>
     <input type="submit" value="Julkaise ilmoitus" />
   </form>

@@ -31,7 +31,12 @@ def new_invite():
     if request.method == "POST":
         serie_id = int(request.form["serie_id"])
         team_name = request.form["team_name"].strip()
+        boat_size = int(request.form["boat_size"]) 
         description = request.form["description"].strip()
+        boat_type = request.form["boat_type"]
+        boat_condition = request.form["boat_condition"]
+        target_time = request.form["target_time"]
+        mood_in_boat = request.form["mood_in_boat"]
         captain = session["user_id"]
 
         if len(team_name) < 1 or len(team_name) > 50 or len(description) > 480: 
@@ -41,7 +46,9 @@ def new_invite():
             message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
             return render_template("create_team.html", message=message)
         
-        teams.create_team(team_name, captain, serie_id, description)
+        print(boat_size, boat_type)
+        
+        teams.create_team(team_name, captain, serie_id, boat_size, description)
         return redirect("/")
 
 @app.route("/find_team")
@@ -80,6 +87,7 @@ def edit_team(team_id):
 
         new_serie_id = int(request.form["serie_id"])
         new_name = request.form["team_name"].strip()
+        new_boat_size = int(request.form["boat_size"])
         new_description = request.form["description"].strip()
 
         if (len(new_name) < 1 or len(new_name) > 50 or
@@ -97,7 +105,8 @@ def edit_team(team_id):
             return render_template("edit_team.html", team=team,
                                    message=message)
 
-        teams.update_team(team_id, new_name, new_serie_id, new_description)
+        teams.update_team(team_id, new_name, new_serie_id, new_boat_size,
+                          new_description)
         return redirect(f"/team/{team_id}")
     
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])

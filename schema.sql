@@ -21,3 +21,12 @@ CREATE TABLE teams (
     active INTEGER DEFAULT 1,
     UNIQUE (serie_id, name)
 );
+
+CREATE TABLE team_classes (
+    id INTEGER PRIMARY KEY,
+    team_id INTEGER REFERENCES teams,
+    boat_type TEXT,
+    boat_condition TEXT,
+    target_time TEXT,
+    mood_in_boat TEXT
+);
