@@ -40,6 +40,17 @@
         <option value=9>8 soutajaa + perämies</option>
       </select>
     </p>
+    {% for class in classes %}
+    <p>
+      {{ class }}: <br />
+        <select name="{{ class }}">
+          <option value="">(Ei määritetty)</option>
+          {% for option in classes[class] %}
+          <option value="{{ option }}">{{ option }}</option>
+          {% endfor %}     
+        </select>
+    </p>
+    {% endfor %}
     <input type="submit" value="Päivitä ilmoitus" />
     <input type="submit" name="cancel" value="Peruuta" /> 
   </form>

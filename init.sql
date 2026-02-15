@@ -1,6 +1,9 @@
-
 --- Removes old data from database
-DELETE FROM teams, series, users;
+DELETE FROM teams;
+DELETE FROM series;
+DELETE FROM users;
+DELETE FROM classes;
+DELETE FROM team_classes;
 
 --- Initializes series data
 INSERT INTO series (description, start_time, distance) VALUES
@@ -62,3 +65,46 @@ VALUES (8, 0, 8, '', 0, '', 0);
 
 INSERT INTO TEAMS (id, user_id, serie_id, name, boat_capacity, description, active)
 VALUES (9, 0, 9, '', 0, '', 0);
+
+--- Initializes classes data
+INSERT INTO classes (title, value) VALUES
+('Veneen tyyppi', 'Liikkuvapenkkinen kilpavene');
+INSERT INTO classes (title, value) VALUES
+('Veneen tyyppi', 'Kiinteäpenkkinen retkivene');
+
+INSERT INTO classes (title, value) VALUES
+('Veneen kunto', 'Hyvä');
+INSERT INTO classes (title, value) VALUES
+('Veneen kunto', 'Perus');
+INSERT INTO classes (title, value) VALUES
+('Veneen kunto', 'Huono');
+
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '4h');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '4h 15min');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '4h 30min');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '4h 45min');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '5h');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '5h 30min');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '6h');
+INSERT INTO classes (title, value) VALUES
+('Tavoiteaika', '7h');
+
+INSERT INTO classes (title, value) VALUES
+('Tunnelma veneessä', 'Kevyt');
+INSERT INTO classes (title, value) VALUES
+('Tunnelma veneessä', 'Raskas');
+INSERT INTO classes (title, value) VALUES
+('Tunnelma veneessä', 'Kireä');
+INSERT INTO classes (title, value) VALUES
+('Tunnelma veneessä', 'Vapaamielinen');
+INSERT INTO classes (title, value) VALUES
+('Tunnelma veneessä', 'Harras');
+INSERT INTO classes (title, value) VALUES
+('Tunnelma veneessä', 'Vaihteleva');

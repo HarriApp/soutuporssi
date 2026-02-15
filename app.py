@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask import abort, render_template, request, redirect, session
 import config
@@ -22,21 +21,18 @@ def show_user(user_id):
     return render_template("show_user.html", user=user, teams=teams)
 
 @app.route("/create_team", methods=["GET", "POST"])
-def new_invite():
+def create_team():
     users.require_login()
 
     if request.method == "GET":
-        return render_template("create_team.html", message="")
+        classes = teams.get_all_classes()
+        return render_template("create_team.html", message="", classes=classes)
     
     if request.method == "POST":
         serie_id = int(request.form["serie_id"])
         team_name = request.form["team_name"].strip()
         boat_size = int(request.form["boat_size"]) 
         description = request.form["description"].strip()
-        boat_type = request.form["boat_type"]
-        boat_condition = request.form["boat_condition"]
-        target_time = request.form["target_time"]
-        mood_in_boat = request.form["mood_in_boat"]
         captain = session["user_id"]
 
         if len(team_name) < 1 or len(team_name) > 50 or len(description) > 480: 
@@ -45,10 +41,16 @@ def new_invite():
         if not teams.is_name_available(team_name, serie_id):
             message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
             return render_template("create_team.html", message=message)
-        
-        print(boat_size, boat_type)
-        
-        teams.create_team(team_name, captain, serie_id, boat_size, description)
+
+        team_classes = []
+        class_titles = teams.get_class_titles()
+        for title in class_titles:
+            value = request.form.get(title)
+            if value:
+                team_classes.append((title, value))
+
+        teams.create_team(team_name, captain, serie_id, boat_size,
+                          description, team_classes)
         return redirect("/")
 
 @app.route("/find_team")
@@ -77,7 +79,9 @@ def edit_team(team_id):
         abort(404)
 
     if request.method == "GET":
-        return render_template("edit_team.html", team=team, message="")
+        classes = teams.get_all_classes()
+        return render_template("edit_team.html", team=team, message="",
+                               classes=classes)
 
     if request.method == "POST":
         if "cancel" in request.form:
@@ -104,6 +108,13 @@ def edit_team(team_id):
             team.description = new_description
             return render_template("edit_team.html", team=team,
                                    message=message)
+
+        all_classes = teams.get_all_classes()
+        team_classes = []
+        for class_title in all_classes:
+            value = request.form.get(class_title)
+            if value:
+                team_classes.append((class_title, value))
 
         teams.update_team(team_id, new_name, new_serie_id, new_boat_size,
                           new_description)

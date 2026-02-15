@@ -39,49 +39,17 @@
         <option value=9>8 soutajaa + perämies</option>
       </select>
     </p>
+    {% for class in classes %}
+    <p>
+      {{ class }}: <br />
+        <select name="{{ class }}">
+          <option value="">(Ei määritetty)</option>
+          {% for option in classes[class] %}
+          <option value="{{ option }}">{{ option }}</option>
+          {% endfor %}     
+        </select>
     </p>
-      Veneen tyyppi: <br />
-      <select name="boat_type">
-        <option value=''>Ei määritetty</option>
-        <option value='moving seats'>Liikkuvapenkkinen kilpavene</option>
-        <option value='fixed seats'>Kiinteäpenkkinen retkivene</option>
-      </select>
-    </p>
-    </p>
-      Veneen kunto: <br />
-      <select name="boat_condition">
-        <option value=''>Ei määritetty</option>
-        <option value='A'>Hyvä</option>
-        <option value='B'>Perus</option>
-        <option value='C'>Huono</option>
-      </select>
-    </p>
-    </p>
-      Tavoiteaika: <br />
-      <select name="target_time">
-        <option value=''>Ei määritetty</option>
-        <option value='4.0'>4h</option>
-        <option value='4.25'>4h 15min</option>
-        <option value='4.5'>4h 30min</option>
-        <option value='4.75'>4h 45min</option>
-        <option value='5.0'>5h </option>
-        <option value='5.5'>5h 30min</option>
-        <option value='6.0'>6h</option>
-        <option value='7.0'>7h</option>
-      </select>
-    </p>
-        </p>
-      Tunnelma veneessä: <br />
-      <select name="mood_in_boat">
-        <option value=''>Ei määritetty</option>
-        <option value='Fun'>Kevyt</option>
-        <option value='Heavy'>Raskas</option>
-        <option value='Tense'>Kireä</option>
-        <option value='Free'>Vapaamielinen</option>
-        <option value='Strict'>Harras</option>
-        <option value='Instabile'>Vaihteleva</option>
-      </select>
-    </p>
+    {% endfor %}
     <input type="submit" value="Julkaise ilmoitus" />
   </form>
   <a href="/">Takaisin etusivulle</a>

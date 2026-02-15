@@ -1,7 +1,8 @@
 import db
 from werkzeug.security import generate_password_hash
 
-def create_team(name, captain_user_id, serie_id,  boat_capacity, description):
+def create_team(name, captain_user_id, serie_id,  boat_capacity,
+                description, classes):
     sql = '''INSERT INTO teams (name,
                                 user_id,
                                 serie_id,
@@ -10,6 +11,12 @@ def create_team(name, captain_user_id, serie_id,  boat_capacity, description):
              VALUES (?, ?, ?, ?, ?)'''
     db.execute(sql,
                [name, captain_user_id, serie_id, boat_capacity, description])
+    
+    team_id = db.last_insert_id()
+    for title, value in classes:
+        sql = '''INSERT INTO team_classes (team_id, title, value)
+                 VALUES (?, ?, ?)'''
+        db.execute(sql, [team_id, title, value])
 
 def update_team(team_id, name, serie_id, boat_capacity, description):
     sql = '''UPDATE teams SET name=?,
@@ -43,6 +50,29 @@ def get_all_teams():
              ORDER BY T.id DESC'''
     return db.query(sql)
 
+def get_class_titles():
+    sql = '''SELECT DISTINCT title FROM classes'''
+    return [row[0] for row in db.query(sql)]
+
+def get_all_classes():
+    sql = '''SELECT title, value FROM classes'''
+    result = db.query(sql)
+
+    classes = {}
+    for title, value in result:
+        if title not in classes:
+            classes[title] = []
+        classes[title].append(value)
+
+    return classes
+
+def get_team_classes(team_id):
+    result = {}
+    sql = '''SELECT title, value FROM team_classes WHERE team_id = ?'''
+    for title, value in db.query(sql, [team_id]):
+        result[title] = value
+    return result
+
 def get_team_by_id(team_id):
     sql = '''SELECT T.id AS id, T.name AS name, T.description AS description,
              T.serie_id AS serie_id, T.boat_capacity AS boat_capacity,
@@ -55,13 +85,15 @@ def get_team_by_id(team_id):
     if not result:
         return None
     team = result[0]
+    team_classes = get_team_classes(team_id)
     return Team(team["id"], team["name"], team["description"],
                 team["serie_id"], team["boat_capacity"],
-                team["serie_description"], team["captain"], team["captain_id"])
+                team["serie_description"], team["captain"], team["captain_id"],
+                team_classes)
 
 class Team:
     def __init__(self, id, name, description, serie_id, boat_capacity,
-                 serie_description, captain, captain_id):
+                 serie_description, captain, captain_id, classes):
         self.id = id
         self.name = name
         self.description = description
@@ -70,3 +102,4 @@ class Team:
         self.serie_description = serie_description
         self.captain = captain
         self.captain_id = captain_id
+        self.classes = classes

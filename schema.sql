@@ -22,11 +22,15 @@ CREATE TABLE teams (
     UNIQUE (serie_id, name)
 );
 
+CREATE TABLE classes (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    value TEXT
+);
+
 CREATE TABLE team_classes (
     id INTEGER PRIMARY KEY,
     team_id INTEGER REFERENCES teams,
-    boat_type TEXT,
-    boat_condition TEXT,
-    target_time TEXT,
-    mood_in_boat TEXT
+    title TEXT,
+    value TEXT
 );
