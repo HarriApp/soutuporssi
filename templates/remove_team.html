@@ -13,7 +13,7 @@
       Haluatko varmasti poistaa joukkueen <i>{{ team.name }}</i> lähdöstä <i>
       {{ team.serie_description }}</i>?<br />
     </p>
-    
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="cancel" value="Peruuta" /> 
     <input type="submit" name="remove" value="Poista joukkue" />
   </form>

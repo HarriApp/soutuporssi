@@ -1,11 +1,18 @@
 from flask import Flask
 from flask import abort, render_template, request, redirect, session
+import secrets
 import config
 import teams
 import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+def check_csrf():
+    if "csrf_token" not in request.form or "csrf_token" not in session:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
 
 @app.route("/")
 def index():
@@ -29,6 +36,7 @@ def create_team():
         return render_template("create_team.html", message="", classes=classes)
     
     if request.method == "POST":
+        check_csrf()
         serie_id = int(request.form["serie_id"])
         team_name = request.form["team_name"].strip()
         boat_size = int(request.form["boat_size"]) 
@@ -74,6 +82,7 @@ def edit_team(team_id):
                                classes=classes)
 
     if request.method == "POST":
+        check_csrf()
         if "cancel" in request.form:
             return redirect("/")
         if team.captain_id != session["user_id"]:
@@ -149,6 +158,7 @@ def remove_team(team_id):
         return render_template("remove_team.html", team=team)
 
     if request.method == "POST":
+        check_csrf()
         if "cancel" in request.form:
             return redirect(f"/team/{team_id}")
         if team.captain_id != session["user_id"]:
@@ -206,6 +216,7 @@ def login():
             
         session["user_id"] = user_id
         session["username"] = username
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
 
 @app.route("/logout")
