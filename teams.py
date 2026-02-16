@@ -18,13 +18,21 @@ def create_team(name, captain_user_id, serie_id,  boat_capacity,
                  VALUES (?, ?, ?)'''
         db.execute(sql, [team_id, title, value])
 
-def update_team(team_id, name, serie_id, boat_capacity, description):
+def update_team(team_id, name, serie_id, boat_capacity, description, classes):
     sql = '''UPDATE teams SET name=?,
                               serie_id=?,
                               boat_capacity=?,
                               description=?
              WHERE id=?'''
     db.execute(sql, [name, serie_id, boat_capacity, description, team_id])
+
+    sql = '''DELETE FROM team_classes WHERE team_id = ?'''
+    db.execute(sql, [team_id])
+
+    for title, value in classes:
+        sql = '''INSERT INTO team_classes (team_id, title, value)
+                 VALUES (?, ?, ?)'''
+        db.execute(sql, [team_id, title, value])
 
 def remove_team(team_id):
     name_hash = generate_password_hash(f"{team_id} of team to be removed")

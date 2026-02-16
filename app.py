@@ -51,10 +51,12 @@ def create_team():
             return render_template("create_team.html", message=message)
 
         team_classes = []
-        class_titles = teams.get_class_titles()
-        for title in class_titles:
+        all_classes = teams.get_all_classes()
+        for title in all_classes:
             value = request.form.get(title)
             if value:
+                if value not in all_classes[title]:
+                    abort(403)
                 team_classes.append((title, value))
 
         teams.create_team(team_name, captain, serie_id, boat_size,
@@ -109,16 +111,18 @@ def edit_team(team_id):
                                    message=message)
 
         all_classes = teams.get_all_classes()
-        team_classes = []
+        new_team_classes = []
         for class_title in all_classes:
             value = request.form.get(class_title)
             if value:
-                team_classes.append((class_title, value))
+                if value not in all_classes[class_title]:
+                    abort(403)
+                new_team_classes.append((class_title, value))
 
         teams.update_team(team_id, new_name, new_serie_id, new_boat_size,
-                          new_description)
+                          new_description, new_team_classes)
         return redirect(f"/team/{team_id}")
-    
+
 @app.route("/find_team")
 def find_team():
     query = request.args.get("query")

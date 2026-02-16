@@ -46,7 +46,11 @@
         <select name="{{ class }}">
           <option value="">(Ei määritetty)</option>
           {% for option in classes[class] %}
+          {% if team.classes and team.classes.get(class) == option %}
+          <option value="{{ option }}" selected>{{ option }}</option>
+          {% else %}
           <option value="{{ option }}">{{ option }}</option>
+          {% endif %}
           {% endfor %}     
         </select>
     </p>
