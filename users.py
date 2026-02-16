@@ -32,10 +32,28 @@ def login(username, password):
         return None
     
 def get_teams(user_id):
-    sql = '''SELECT T.id AS team_id, T.name AS team_name, S.description AS serie_name
+    sql = '''SELECT T.id AS team_id, T.name AS team_name, S.description
+             AS serie_name
              FROM teams T JOIN series S ON T.serie_id = S.id
              WHERE T.user_id = ? AND T.active = 1 ORDER BY T.id DESC'''
     return db.query(sql, [user_id])
+
+def get_memberships(user_id):
+    sql = '''SELECT T.id AS team_id, T.name AS team_name, S.description
+             AS serie_name
+             FROM teams T JOIN series S ON T.serie_id = S.id JOIN crews C
+             ON T.id = C.team_id
+             WHERE C.user_id = ? AND T.active = 1 ORDER BY C.id DESC'''
+    return db.query(sql, [user_id])
+
+def is_in_team(user_id, team_id):
+    sql = '''SELECT id FROM crews WHERE user_id = ? AND team_id = ?'''
+    return len(db.query(sql, [user_id, team_id])) > 0
+
+def is_in_serie(user_id, serie_id):
+    sql = '''SELECT id FROM crews WHERE user_id = ? AND team_id
+             IN (SELECT id FROM teams WHERE serie_id = ?)'''
+    return len(db.query(sql, [user_id, serie_id])) > 0
 
 def require_login():
     if "user_id" not in session:

@@ -22,6 +22,13 @@ CREATE TABLE teams (
     UNIQUE (serie_id, name)
 );
 
+CREATE TABLE crews (
+    id INTEGER PRIMARY KEY,
+    team_id INTEGER REFERENCES teams,
+    user_id INTEGER REFERENCES users,
+    UNIQUE (team_id, user_id)
+);
+
 CREATE TABLE classes (
     id INTEGER PRIMARY KEY,
     title TEXT,

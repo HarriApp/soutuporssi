@@ -73,6 +73,10 @@ def get_team_classes(team_id):
         result[title] = value
     return result
 
+def add_member(team_id, user_id):
+    sql = '''INSERT INTO crews (team_id, user_id) VALUES (?, ?)'''
+    db.execute(sql, [team_id, user_id])
+
 def get_team_by_id(team_id):
     sql = '''SELECT T.id AS id, T.name AS name, T.description AS description,
              T.serie_id AS serie_id, T.boat_capacity AS boat_capacity,

@@ -53,16 +53,6 @@ def create_team():
                           description, team_classes)
         return redirect("/")
 
-@app.route("/find_team")
-def find_team():
-    query = request.args.get("query")
-    if query:
-        results = teams.search(query)
-    else:
-        results = []
-        query = ""
-    return render_template("find_team.html", query=query, results=results)
-
 @app.route("/team/<int:team_id>")
 def show_team(team_id):
     team = teams.get_team_by_id(team_id)
@@ -120,6 +110,33 @@ def edit_team(team_id):
                           new_description)
         return redirect(f"/team/{team_id}")
     
+@app.route("/find_team")
+def find_team():
+    query = request.args.get("query")
+    if query:
+        results = teams.search(query)
+    else:
+        results = []
+        query = ""
+    return render_template("find_team.html", query=query, results=results)
+
+@app.route("/join_team/<int:team_id>")
+def join_team(team_id):
+    users.require_login()
+
+    team = teams.get_team_by_id(team_id)
+    if not team:
+        abort(404)
+
+    if team.captain_id == session["user_id"]:
+        abort(403)
+
+    if users.is_in_team(session["user_id"], team_id):
+        abort(403)
+
+    teams.add_member(team_id, session["user_id"])
+    return redirect(f"/team/{team_id}")
+
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])
 def remove_team(team_id):
     users.require_login()
