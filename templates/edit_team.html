@@ -32,14 +32,6 @@
       Joukkueen kuvaus: <br />
       <textarea name="description" rows="8" cols="60" maxlength="480">{{ team.description }}</textarea>
     </p>
-    </p>
-      Veneen koko (*): <br />
-      <select name="boat_size" required>
-        <option value=15>14 soutajaa + perämies</option>
-        <option value=11>10 soutajaa + perämies</option>
-        <option value=9>8 soutajaa + perämies</option>
-      </select>
-    </p>
     {% for class in classes %}
     <p>
       {{ class }}: <br />

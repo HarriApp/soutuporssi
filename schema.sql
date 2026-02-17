@@ -16,7 +16,6 @@ CREATE TABLE teams (
     user_id INTEGER REFERENCES users,
     serie_id INTEGER REFERENCES series,
     name TEXT,
-    boat_capacity INTEGER,
     description TEXT,
     active INTEGER DEFAULT 1,
     UNIQUE (serie_id, name)

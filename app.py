@@ -39,7 +39,6 @@ def create_team():
         check_csrf()
         serie_id = int(request.form["serie_id"])
         team_name = request.form["team_name"].strip()
-        boat_size = int(request.form["boat_size"]) 
         description = request.form["description"].strip()
         captain = session["user_id"]
 
@@ -59,8 +58,8 @@ def create_team():
                     abort(403)
                 team_classes.append((title, value))
 
-        teams.create_team(team_name, captain, serie_id, boat_size,
-                          description, team_classes)
+        teams.create_team(team_name, captain, serie_id, description,
+                          team_classes)
         return redirect("/")
 
 @app.route("/team/<int:team_id>")
@@ -92,7 +91,6 @@ def edit_team(team_id):
 
         new_serie_id = int(request.form["serie_id"])
         new_name = request.form["team_name"].strip()
-        new_boat_size = int(request.form["boat_size"])
         new_description = request.form["description"].strip()
 
         if (len(new_name) < 1 or len(new_name) > 50 or
@@ -119,8 +117,8 @@ def edit_team(team_id):
                     abort(403)
                 new_team_classes.append((class_title, value))
 
-        teams.update_team(team_id, new_name, new_serie_id, new_boat_size,
-                          new_description, new_team_classes)
+        teams.update_team(team_id, new_name, new_serie_id, new_description,
+                          new_team_classes)
         return redirect(f"/team/{team_id}")
 
 @app.route("/find_team")
