@@ -102,14 +102,23 @@ def get_team_by_id(team_id):
         return None
     team = result[0]
     team_classes = get_team_classes(team_id)
+
+    crew_list = []
+    sql = '''SELECT U.id, U.username FROM crews C
+             LEFT JOIN users U ON C.user_id = U.id
+             WHERE C.team_id = ?'''
+    result = db.query(sql, [team_id])
+    for user_id, username in result:
+        crew_list.append((user_id, username))
+    
     return Team(team["id"], team["name"], team["description"],
                 team["serie_id"], team["boat_capacity"],
                 team["serie_description"], team["captain"], team["captain_id"],
-                team_classes)
+                team_classes, crew_list)
 
 class Team:
     def __init__(self, id, name, description, serie_id, boat_capacity,
-                 serie_description, captain, captain_id, classes):
+                 serie_description, captain, captain_id, classes, crew_list):
         self.id = id
         self.name = name
         self.description = description
@@ -119,3 +128,4 @@ class Team:
         self.captain = captain
         self.captain_id = captain_id
         self.classes = classes
+        self.crew_list = crew_list

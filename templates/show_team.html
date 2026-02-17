@@ -18,7 +18,13 @@
   {% endfor %}
   </ul>
   {% endif %}
-  <p>Kapteeni: <a href="/user/{{ team.captain_id }}">{{ team.captain }}</a></p>
+  <h3>Jäsenet:</h3>
+  <ul>
+    <li><a href="/user/{{ team.captain_id }}">{{ team.captain }}</a> (C)</li>
+    {% for user_id, username in team.crew_list %}
+    <li><a href="/user/{{ user_id }}">{{ username }}</a></li>
+    {% endfor %}
+  </ul>
   <br>
   {% if session.user_id == team.captain_id %}
   <a href="/edit_team/{{ team.id }}">Muokkaa</a>
