@@ -7,7 +7,7 @@
 * Käyttäjä pystyy lisäämään ilmoituksia ja muokkaamaan ja poistamaan niitä.
 * Käyttäjä näkee sovellukseen lisätyt ilmoitukset.
 * Käyttäjä pystyy etsimään ilmoituksia sarjan ja soutupäivän perusteella.
-* Käyttäjä pystyy valitsemaan ilmoitukselle yhden tai useamman luokittelun (esim. sarja, soutukokemus).
+* Käyttäjä pystyy valitsemaan ilmoitukselle yhden tai useamman luokittelun (Esim. veneen tyyppi, veneen kunto ja tavoiteaika).
 * Käyttäjä pystyy ilmoittautumaan miehistön jäseneksi. Ilmoituksessa näytetään, ketkä käyttäjät ovat ilmoittautuneet.
 * Käyttäjäsivu näyttää, montako ilmoitusta käyttäjä on lähettänyt, listan käyttäjän omista ilmoituksista, sekä muut venekunnat joihin käyttäjä on ilmoitautunut miehistön jäseneksi.
 

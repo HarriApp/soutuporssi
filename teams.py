@@ -55,6 +55,10 @@ def get_all_teams():
              ORDER BY T.id DESC'''
     return db.query(sql)
 
+def get_series():
+    sql = '''SELECT id, description FROM series'''
+    return db.query(sql)
+
 def get_class_titles():
     sql = '''SELECT DISTINCT title FROM classes'''
     return [row[0] for row in db.query(sql)]

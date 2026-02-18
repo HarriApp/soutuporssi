@@ -18,7 +18,8 @@
   <h2>Tulokset</h2>
     <ul>
     {% for team in results %}
-      <li><a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
+      <li>
+        <a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
     {% endfor %}
     {% if not results %}
       <li>Yhtään joukkuetta ei löytynyt</li>

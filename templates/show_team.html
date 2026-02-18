@@ -6,8 +6,9 @@
 </head>
 
 <body>
-  <h1>{{ team.name }}</h1>
-  <p><i>{{ team.serie_description }}</i></p>
+  <h1>Soutupörssi</h1>
+  <h2>{{ team.name }}</h2>
+  <p>{{ team.serie_description }}</p>
   <p>{{ team.description }}</p>
   {% if team.classes %}
   <p>Luokat:</p>
@@ -17,7 +18,7 @@
   {% endfor %}
   </ul>
   {% endif %}
-  <h3>Jäsenet:</h3>
+  <p>Miehistö:</p>
   <ul>
     <li><a href="/user/{{ team.captain_id }}">{{ team.captain }}</a> (C)</li>
     {% for user_id, username in team.crew_list %}

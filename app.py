@@ -32,8 +32,10 @@ def create_team():
     users.require_login()
 
     if request.method == "GET":
+        series = teams.get_series()
         classes = teams.get_all_classes()
-        return render_template("create_team.html", message="", classes=classes)
+        return render_template("create_team.html", message="", classes=classes,
+                               series=series)
     
     if request.method == "POST":
         check_csrf()
@@ -78,9 +80,10 @@ def edit_team(team_id):
         abort(404)
 
     if request.method == "GET":
+        series = teams.get_series()
         classes = teams.get_all_classes()
         return render_template("edit_team.html", team=team, message="",
-                               classes=classes)
+                               classes=classes, series=series)
 
     if request.method == "POST":
         check_csrf()
