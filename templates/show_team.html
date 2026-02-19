@@ -29,8 +29,16 @@
   {% if session.user_id == team.captain_id %}
   <a href="/edit_team/{{ team.id }}">Muokkaa</a>
   <a href="/remove_team/{{ team.id }}">Poista</a>
-  {% elif session.user_id %}
+  {% elif session.user_id and not team.is_user_in_serie and not team.is_full %}
   <a href="/join_team/{{ team.id }}">Liity joukkueeseen</a><br>
+  {% else %}
+  {% if team.is_full %}
+  <p>Joukkue on täynnä</p>
+  {% elif not session.user_id %}
+  <p>Kirjaudu sisään liittyäksesi joukkueeseen</p>
+  {% elif team.is_user_in_serie %}
+  <p>Et voi liittyä joukkueeseen, sillä olet toisesssa veneessä tässä sarjassa</p>
+  {% endif %}
   {% endif %}
   <a href="/">Takaisin etusivulle</a>
 </body>

@@ -69,6 +69,15 @@ def show_team(team_id):
     team = teams.get_team_by_id(team_id)
     if not team:
         abort(404)
+
+    if "user_id" in session:
+        team.is_user_member = users.is_in_team(session.get("user_id"), team_id)
+        team.is_user_in_serie = users.is_in_serie(session.get("user_id"),
+                                             team.serie_id)
+    else:
+        team.is_user_member = False
+        team.is_user_in_serie = False
+
     return render_template("show_team.html", team=team)
 
 @app.route("/edit_team/<int:team_id>", methods=["GET", "POST"])
@@ -145,7 +154,13 @@ def join_team(team_id):
     if team.captain_id == session["user_id"]:
         abort(403)
 
+    if team.is_full:
+        abort(403)
+
     if users.is_in_team(session["user_id"], team_id):
+        abort(403)
+
+    if users.is_in_serie(session["user_id"], team.serie_id):
         abort(403)
 
     teams.add_member(team_id, session["user_id"])

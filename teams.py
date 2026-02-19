@@ -127,3 +127,4 @@ class Team:
         self.captain_id = captain_id
         self.classes = classes
         self.crew_list = crew_list
+        self.is_full = False if len(crew_list) < 2 else True
