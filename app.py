@@ -166,6 +166,23 @@ def join_team(team_id):
     teams.add_member(team_id, session["user_id"])
     return redirect(f"/team/{team_id}")
 
+@app.route("/leave_team/<int:team_id>")
+def leave_team(team_id):
+    users.require_login()
+
+    team = teams.get_team_by_id(team_id)
+    if not team:
+        abort(404)
+
+    if team.captain_id == session["user_id"]:
+        abort(403)
+
+    if not users.is_in_team(session["user_id"], team_id):
+        abort(403)
+
+    teams.remove_member(team_id, session["user_id"])
+    return redirect(f"/team/{team_id}")
+
 @app.route("/remove_team/<int:team_id>", methods=["GET", "POST"])
 def remove_team(team_id):
     users.require_login()
