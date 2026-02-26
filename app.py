@@ -25,7 +25,9 @@ def show_user(user_id):
     if not user:
         abort(404)
     teams = users.get_teams(user_id)
-    return render_template("show_user.html", user=user, teams=teams)
+    memberships = users.get_memberships(user_id)
+    return render_template("show_user.html", user=user, teams=teams,
+                           memberships=memberships)
 
 @app.route("/create_team", methods=["GET", "POST"])
 def create_team():

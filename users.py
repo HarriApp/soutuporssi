@@ -35,7 +35,7 @@ def get_teams(user_id):
     sql = '''SELECT T.id AS team_id, T.name AS team_name, S.description
              AS serie_name
              FROM teams T JOIN series S ON T.serie_id = S.id
-             WHERE T.user_id = ? AND T.active = 1 ORDER BY T.id DESC'''
+             WHERE T.user_id = ? AND T.active = 1 ORDER BY T.id'''
     return db.query(sql, [user_id])
 
 def get_memberships(user_id):
@@ -43,7 +43,7 @@ def get_memberships(user_id):
              AS serie_name
              FROM teams T JOIN series S ON T.serie_id = S.id JOIN crews C
              ON T.id = C.team_id
-             WHERE C.user_id = ? AND T.active = 1 ORDER BY C.id DESC'''
+             WHERE C.user_id = ? AND T.active = 1 ORDER BY C.id'''
     return db.query(sql, [user_id])
 
 def is_in_team(user_id, team_id):

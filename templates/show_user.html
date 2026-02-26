@@ -7,6 +7,7 @@
 
 <body>
   <h1>Käyttäjä {{ user.username }}</h1>
+  {% if teams | count > 0 %}
   <p>{{ user.username }} toimii kapteenina {{ teams | count }} joukkueessa:</p>
   <ul>
     {% for team in teams %}
@@ -14,6 +15,21 @@
           ({{ team.serie_name }})</li>
     {% endfor %}
   </ul>
+  {% endif %}
+  
+  {% if memberships | count > 0 %}
+  <p>{{ user.username }} on miehistönjäsenenä {{ memberships | count }} joukkueessa:</p>
+  <ul>
+    {% for membership in memberships %}
+      <li><a href="/team/{{ membership.team_id }}">{{ membership.team_name }}</a>
+          ({{ membership.serie_name }})</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if teams | count == 0 and memberships | count == 0 %}
+  <p>{{ user.username }} ei ole vielä ilmoittautunut mihinkään joukkueeseen.</p>
+  {% endif %}
   <p>
     <a href="/">Takaisin etusivulle</a>
   </p>
