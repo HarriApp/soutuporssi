@@ -1,6 +1,8 @@
 import db
 from werkzeug.security import generate_password_hash
 
+MAX_TEAM_SIZE = 3
+
 def create_team(name, captain_user_id, serie_id,description, classes):
     sql = '''INSERT INTO teams (name,
                                 user_id,
@@ -34,16 +36,15 @@ def update_team(team_id, name, serie_id, description, classes):
 def remove_team(team_id):
     sql = 'DELETE FROM crews WHERE team_id = ?'
     db.execute(sql, [team_id])
-
-    name_hash = generate_password_hash(f"{team_id} of team to be removed")
-    sql = '''UPDATE teams SET name=?, active=0
-             WHERE id=?'''
-    db.execute(sql, [name_hash, team_id])
+    sql = 'DELETE FROM team_classes WHERE team_id = ?'
+    db.execute(sql, [team_id])
+    sql = 'DELETE FROM teams WHERE id = ?'
+    db.execute(sql, [team_id])
 
 def search(query):
     sql = '''SELECT T.id, T.name, S.description
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
-             WHERE T.active = 1 AND (T.name LIKE ? OR T.description LIKE ?)
+             WHERE (T.name LIKE ? OR T.description LIKE ?)
              ORDER BY T.id DESC'''
     return db.query(sql, ["%" + query + "%", query])
 
@@ -54,13 +55,19 @@ def is_name_available(name, serie_id):
 def get_all_teams():
     sql = '''SELECT T.id, T.name, S.description
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
-             WHERE T.active = 1
              ORDER BY T.id DESC'''
     return db.query(sql)
 
 def get_series():
     sql = 'SELECT id, description FROM series'
     return db.query(sql)
+
+def get_serie_description(serie_id):
+    sql = 'SELECT description FROM series WHERE id = ?'
+    result = db.query(sql, [serie_id])
+    if not result:
+        return None
+    return result[0][0]
 
 def get_class_titles():
     sql = 'SELECT DISTINCT title FROM classes'
@@ -134,4 +141,4 @@ class Team:
         self.captain_id = captain_id
         self.classes = classes
         self.crew_list = crew_list
-        self.is_full = False if len(crew_list) < 2 else True
+        self.is_full = False if len(crew_list) < MAX_TEAM_SIZE - 1 else True

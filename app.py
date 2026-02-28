@@ -33,9 +33,10 @@ def show_user(user_id):
 def create_team():
     users.require_login()
 
+    series = teams.get_series()
+    classes = teams.get_all_classes()
+
     if request.method == "GET":
-        series = teams.get_series()
-        classes = teams.get_all_classes()
         return render_template("create_team.html", message="", classes=classes,
                                series=series)
     
@@ -47,12 +48,19 @@ def create_team():
         captain = session["user_id"]
 
         if len(team_name) < 1 or len(team_name) > 50 or len(description) > 480: 
-            abort(403)        
+            abort(403)
+
+        if users.is_in_serie(captain, serie_id):
+            message = "VIRHE: Olet jo mukana sarjassa " + \
+            teams.get_serie_description(serie_id) + ". Valitse toinen sarja."
+            return render_template("create_team.html", message=message,
+                                   classes=classes, series=series)        
 
         if not teams.is_name_available(team_name, serie_id):
             message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
-            return render_template("create_team.html", message=message)
-
+            return render_template("create_team.html", message=message,
+                                   classes=classes, series=series)
+        
         team_classes = []
         all_classes = teams.get_all_classes()
         for title in all_classes:
@@ -111,16 +119,35 @@ def edit_team(team_id):
             len(new_description) > 480): 
             abort(403)
 
-        name_or_serie_changed = (new_name != team.name or
-                                 new_serie_id != team.serie_id)
-
-        if (name_or_serie_changed and not
-            teams.is_name_available(new_name, new_serie_id)):
+        serie_changed = new_serie_id != team.serie_id
+        if serie_changed and users.is_in_serie(session["user_id"],
+                                               new_serie_id):
+            message = "VIRHE: Olet jo mukana sarjassa. Valitse toinen sarja."
+            team.serie_id = new_serie_id
+            team.description = new_description
+            series = teams.get_series()
+            classes = teams.get_all_classes()
+            return render_template("edit_team.html", team=team,
+                                   message=message, series=series,
+                                   classes=classes)
+    
+        name_or_serie_changed = new_name != team.name or serie_changed
+        
+        if name_or_serie_changed and not \
+            teams.is_name_available(new_name, new_serie_id):
             message = f"VIRHE: Nimi {new_name} on jo käytössä tässä sarjassa"
             team.serie_id = new_serie_id
             team.description = new_description
+            series = teams.get_series()
+            classes = teams.get_all_classes()
             return render_template("edit_team.html", team=team,
-                                   message=message)
+                                   message=message, series=series,
+                                   classes=classes)
+        
+        if serie_changed:
+            for member_user_id, memeber_user_name in team.crew_list:
+                if users.is_in_serie(member_user_id, new_serie_id):
+                    teams.remove_member(team_id, member_user_id)
 
         all_classes = teams.get_all_classes()
         new_team_classes = []

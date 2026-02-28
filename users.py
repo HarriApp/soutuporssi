@@ -47,12 +47,19 @@ def get_memberships(user_id):
     return db.query(sql, [user_id])
 
 def is_in_team(user_id, team_id):
+    sql = '''SELECT id FROM teams WHERE user_id = ? AND id = ?'''
+    if len(db.query(sql, [user_id, team_id])) > 0:
+        return True
     sql = '''SELECT id FROM crews WHERE user_id = ? AND team_id = ?'''
     return len(db.query(sql, [user_id, team_id])) > 0
 
 def is_in_serie(user_id, serie_id):
-    sql = '''SELECT id FROM crews WHERE user_id = ? AND team_id
-             IN (SELECT id FROM teams WHERE serie_id = ?)'''
+    sql = '''SELECT id FROM teams WHERE user_id = ? AND id IN 
+             (SELECT id FROM teams WHERE serie_id = ?)'''
+    if len(db.query(sql, [user_id, serie_id])) > 0:
+        return True
+    sql = '''SELECT id FROM crews WHERE user_id = ? AND team_id IN
+             (SELECT id FROM teams WHERE serie_id = ?)'''
     return len(db.query(sql, [user_id, serie_id])) > 0
 
 def require_login():

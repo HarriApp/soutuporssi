@@ -17,7 +17,6 @@ CREATE TABLE teams (
     serie_id INTEGER REFERENCES series,
     name TEXT,
     description TEXT,
-    active INTEGER DEFAULT 1,
     UNIQUE (serie_id, name)
 );
 

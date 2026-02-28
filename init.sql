@@ -37,35 +37,6 @@ INSERT INTO series (description, start_time, distance) VALUES
 INSERT INTO USERS (id, username, password_hash) VALUES
 (0, '', 'scrypt:32768:8:1$xxxx');
 
---- Creates team without name to prevent sqlite crashing on empty database
---- and pervent user to teams without name
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (1, 0, 1, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (2, 0, 2, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (3, 0, 3, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (4, 0, 4, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (5, 0, 5, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (6, 0, 6, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (7, 0, 7, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (8, 0, 8, '', '', 0);
-
-INSERT INTO TEAMS (id, user_id, serie_id, name, description, active)
-VALUES (9, 0, 9, '', '', 0);
-
 --- Initializes classes data
 INSERT INTO classes (title, value) VALUES
 ('Veneen tyyppi', 'Liikkuvapenkkinen kilpavene');

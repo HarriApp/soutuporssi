@@ -10,6 +10,11 @@
   <h2>Muokkaa ilmoitusta</h2>
   <p>{{ message }}</p>
   <form action="/edit_team/{{ team.id }}" method="post">
+    {% if team.crew_list | length > 0 %}
+    <p>Huomio! Joukkueeseen on ilmoittautunut jo soutajia. Jos vaihdat sarjaa,
+      mahdolliset toisessa joukkueessa kyseisessä sarjassa kilpailevat soutajat
+      poistetaan miehistöluettelosta.</p>
+    {% endif %}
     <p>
       Soutumatka ja -sarja: <br />
       <select name="serie_id" required>

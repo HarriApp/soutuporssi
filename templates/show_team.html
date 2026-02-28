@@ -37,7 +37,7 @@
   {% elif not session.user_id %}
   <p>Kirjaudu sisään liittyäksesi joukkueeseen</p>
   {% elif team.is_user_in_serie and not team.is_user_member %}
-  <p>Et voi liittyä joukkueeseen, sillä olet toisessa veneessä tässä sarjassa</p>
+  <p>Et voi liittyä joukkueeseen, sillä olet toisessa joukkueessa tässä sarjassa</p>
   {% endif %}
   {% if team.is_user_member %}
   <a href="/leave_team/{{ team.id }}">Poistu joukkueesta</a><br>
