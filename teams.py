@@ -46,7 +46,7 @@ def search(query):
              FROM teams T LEFT JOIN series S ON T.serie_id = S.id
              WHERE (T.name LIKE ? OR T.description LIKE ?)
              ORDER BY T.id DESC'''
-    return db.query(sql, ["%" + query + "%", query])
+    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
 
 def is_name_available(name, serie_id):
     sql = 'SELECT id FROM teams WHERE name = ? AND serie_id = ?'
