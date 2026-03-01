@@ -22,4 +22,3 @@ def execute(sql, params=[]):
 
 def last_insert_id():
     return g.last_insert_id
- 

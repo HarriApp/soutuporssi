@@ -1,6 +1,6 @@
-import db
 from flask import abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
+import db
 
 def get_user(user_id):
     sql = '''SELECT id, username FROM users WHERE id = ?'''
@@ -23,14 +23,13 @@ def login(username, password):
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])[0]
         user_id = result["id"]
-        password_hash = result["password_hash"]        
+        password_hash = result["password_hash"]
         if check_password_hash(password_hash, password):
             return user_id
-        else:
-            return None
+        return None
     except IndexError:
         return None
-    
+
 def get_teams(user_id):
     sql = '''SELECT T.id AS team_id, T.name AS team_name, S.description
              AS serie_name
@@ -54,7 +53,7 @@ def is_in_team(user_id, team_id):
     return len(db.query(sql, [user_id, team_id])) > 0
 
 def is_in_serie(user_id, serie_id):
-    sql = '''SELECT id FROM teams WHERE user_id = ? AND id IN 
+    sql = '''SELECT id FROM teams WHERE user_id = ? AND id IN
              (SELECT id FROM teams WHERE serie_id = ?)'''
     if len(db.query(sql, [user_id, serie_id])) > 0:
         return True

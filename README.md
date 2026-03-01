@@ -1,15 +1,15 @@
 # Soutupörssi
+Sovelluksessa käyttäjät voivat etsiä miehistöjä kirkkoveneisiinsä sekä ilmoittautua mukaan muiden käyttäjien luomiin joukkueisiin tulevan kesän Sulkavan Suursoutuihin. Ilmoituksessa näkyvät joukkueen nimi, lähtö, jossa joukkue kilpailee, sekä muut käyttäjät, jotka ovat ilmoittautuneet mukaan. Sovellus huolehtii myös siitä, ettei joukkueen enimmäiskoko ylity eikä yksikään käyttäjä päädy samaan lähtöön kahdessa eri joukkueessa.
 
 ## Sovelluksen toiminnot
 
-* Sovelluksessa käyttäjät pystyvät etsimään miehistöjä kirkkoveneisiinsä tulevan kesän Sulkavan Suursoutuihin. Ilmoituksessa lukee missä sarjassa ja milloin joukkue kilpailee sekä tarvittava soutajien määrä.
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
-* Käyttäjä pystyy lisäämään ilmoituksia ja muokkaamaan ja poistamaan niitä.
-* Käyttäjä näkee sovellukseen lisätyt ilmoitukset.
-* Käyttäjä pystyy etsimään ilmoituksia sarjan ja soutupäivän perusteella.
-* Käyttäjä pystyy valitsemaan ilmoitukselle yhden tai useamman luokittelun (Esim. veneen tyyppi, veneen kunto ja tavoiteaika).
-* Käyttäjä pystyy ilmoittautumaan miehistön jäseneksi. Ilmoituksessa näytetään, ketkä käyttäjät ovat ilmoittautuneet.
-* Käyttäjäsivu näyttää, montako ilmoitusta käyttäjä on lähettänyt, listan käyttäjän omista ilmoituksista, sekä muut venekunnat joihin käyttäjä on ilmoitautunut miehistön jäseneksi.
+* Käyttäjä näkee sovellukseen lisätyt joukkueet sekä sarjat joissa ne kilpailevat.
+* Käyttäjä pystyy lisäämään joukkueita sekä muokkaamaan ja poistamaan niitä.
+* Käyttäjä pystyy etsimään joukkueita nimen ja kuvauksen perusteella.
+* Käyttäjä pystyy valitsemaan ilmoitukselle yhden tai useamman luokittelun (Veneen tyyppi, veneen kunto, tavoiteaika ja tunnelma veneessä).
+* Käyttäjä voi ilmoittautua joukkueen miehistöön, mikäli joukkueessa on tilaa eikä käyttäjä ole jo ilmoittautunut samaan sarjaan toisen venekunnan mukana.
+* Käyttäjäsivu näyttää, montako joukkuetta käyttäjä kipparoi, listan käyttäjän omista joukkueista sekä ne muut venekunnat, joihin käyttäjä on ilmoittautunut miehistön jäseneksi.
 
 ## Sovelluksen asennus
 

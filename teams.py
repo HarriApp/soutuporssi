@@ -1,7 +1,6 @@
 import db
-from werkzeug.security import generate_password_hash
 
-MAX_TEAM_SIZE = 3
+MAX_TEAM_SIZE = 15
 
 def create_team(name, captain_user_id, serie_id,description, classes):
     sql = '''INSERT INTO teams (name,
@@ -11,7 +10,7 @@ def create_team(name, captain_user_id, serie_id,description, classes):
              VALUES (?, ?, ?, ?)'''
     db.execute(sql,
                [name, captain_user_id, serie_id, description])
-    
+
     team_id = db.last_insert_id()
     for title, value in classes:
         sql = '''INSERT INTO team_classes (team_id, title, value)
@@ -124,15 +123,15 @@ def get_team_by_id(team_id):
     result = db.query(sql, [team_id])
     for user_id, username in result:
         crew_list.append((user_id, username))
-    
+
     return Team(team["id"], team["name"], team["description"],
                 team["serie_id"], team["serie_description"], team["captain"],
                 team["captain_id"], team_classes, crew_list)
 
 class Team:
-    def __init__(self, id, name, description, serie_id, serie_description,
+    def __init__(self, team_id, name, description, serie_id, serie_description,
                  captain, captain_id, classes, crew_list):
-        self.id = id
+        self.id = team_id
         self.name = name
         self.description = description
         self.serie_id = serie_id
@@ -141,4 +140,5 @@ class Team:
         self.captain_id = captain_id
         self.classes = classes
         self.crew_list = crew_list
-        self.is_full = False if len(crew_list) < MAX_TEAM_SIZE - 1 else True
+        self.is_full = len(crew_list) >= MAX_TEAM_SIZE - 1
+        self.free_seats = MAX_TEAM_SIZE - len(crew_list) - 1
