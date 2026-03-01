@@ -27,8 +27,8 @@ INSERT INTO series (description, start_time, distance) VALUES
 INSERT INTO series (description, start_time, distance) VALUES 
 ('Retkisoutu 70 km, 2. lähtö, La 11.7.2026', '2026-07-11 08:00:00', 70);
 
-INSERT INTO series (description, start_time, distance)
-VALUES ('Kuningasmatka 60km, Iltasoutu, Pe 10.7.2026', '2026-07-10 18:00:00', 60);
+INSERT INTO series (description, start_time, distance) VALUES
+('Kuningasmatka 60km, Iltasoutu, Pe 10.7.2026', '2026-07-10 18:00:00', 60);
 
 INSERT INTO series (description, start_time, distance) VALUES
 ('Kuningasmatka 60km, Päiväsoutu, La 11.7.2026', '2026-07-11 12:00:00', 60);

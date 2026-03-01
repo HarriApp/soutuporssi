@@ -18,17 +18,26 @@
   {% endif %}
   
   {% if memberships | count > 0 %}
-  <p>{{ user.username }} on miehistönjäsenenä {{ memberships | count }} joukkueessa:</p>
+  <p>
+    {{ user.username }} on miehistönjäsenenä {{ memberships | count }} 
+    joukkueessa:
+  </p>
   <ul>
     {% for membership in memberships %}
-      <li><a href="/team/{{ membership.team_id }}">{{ membership.team_name }}</a>
-          ({{ membership.serie_name }})</li>
+      <li>
+        <a href="/team/{{ membership.team_id }}">
+          {{ membership.team_name }}
+        </a>
+        ({{ membership.serie_name }})
+      </li>
     {% endfor %}
   </ul>
   {% endif %}
 
   {% if teams | count == 0 and memberships | count == 0 %}
-  <p>{{ user.username }} ei ole vielä ilmoittautunut mihinkään joukkueeseen.</p>
+  <p>
+    {{ user.username }} ei ole vielä ilmoittautunut mihinkään joukkueeseen.
+  </p>
   {% endif %}
   <p>
     <a href="/">Takaisin etusivulle</a>

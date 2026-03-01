@@ -20,7 +20,9 @@
       <select name="serie_id" required>
         {% for serie in series %}
         {% if team.serie_id == serie.id %}
-        <option value="{{ serie.id }}" selected>{{ serie.description }}</option>
+        <option value="{{ serie.id }}" selected>
+          {{ serie.description }}
+        </option>
         {% else %}
         <option value="{{ serie.id }}">{{ serie.description }}</option>
         {% endif %}
@@ -34,7 +36,9 @@
     </p>
     <p>
       Joukkueen kuvaus: <br />
-      <textarea name="description" rows="8" cols="60" maxlength="480">{{ team.description }}</textarea>
+      <textarea name="description" rows="8" cols="60" maxlength="480">
+        {{ team.description }}
+      </textarea>
     </p>
     {% for class in classes %}
     <p>

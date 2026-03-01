@@ -9,7 +9,8 @@
   <h1>Soutupörssi</h1>
   {% if session.username %}
   <p>
-    Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
+    Olet kirjautunut nimellä 
+    <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
   </p>
   <p>
     <a href="/create_team">Kokoa joukkue</a>
@@ -26,7 +27,10 @@
   <h2>Joukkueet</h2>
   <ul>
     {% for team in teams %}
-    <li><a href="/team/{{ team.id }}">{{ team.name }}</a> sarjassa {{ team.description }}</li>
+    <li>
+      <a href="/team/{{ team.id }}">{{ team.name }}</a> 
+      sarjassa {{ team.description }}
+    </li>
     {% endfor %}
   </ul>
   {% if not teams %}
