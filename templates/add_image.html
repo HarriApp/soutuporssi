@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="/static/main.css">
+  <title>Lisää profiilikuva</title>
+</head>
+
+<body>
+  <h1>Soutupörssi</h1>
+  <h2>Lisää profiilikuva</h2>
+  <p>{{ message }}</p>
+  {% if session.username %}
+  <form action="/add_image" method="post" enctype="multipart/form-data">
+    <p>
+      Kuva: <input type="file" name="image" accept=".jpg" />
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" value="Lähetä" />
+  </form>
+  {% endif %}
+</body>
+
+</html>
