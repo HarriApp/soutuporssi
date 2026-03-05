@@ -311,7 +311,7 @@ def add_image():
 
         return redirect("/user/" + str(user_id))
 
-@app.route("/image/<int:user_id>")
+@app.route("/show_image/<int:user_id>")
 def show_image(user_id):
     image = users.get_image(user_id)
     if not image:
