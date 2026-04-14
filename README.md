@@ -28,6 +28,8 @@ $ sqlite3 database.db < schema.sql
 $ sqlite3 database.db < init.sql
 ```
 
+Vaihda tiedostossa config.py oleva kehityksen aikainen salainen.
+
 Voit käynnistää sovelluksen näin:
 
 ```

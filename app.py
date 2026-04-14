@@ -173,8 +173,9 @@ def find_team():
         query = ""
     return render_template("find_team.html", query=query, results=results)
 
-@app.route("/join_team/<int:team_id>")
+@app.route("/join_team/<int:team_id>", methods=["POST"])
 def join_team(team_id):
+    check_csrf()
     users.require_login()
 
     team = teams.get_team_by_id(team_id)
@@ -196,8 +197,9 @@ def join_team(team_id):
     teams.add_member(team_id, session["user_id"])
     return redirect(f"/team/{team_id}")
 
-@app.route("/leave_team/<int:team_id>")
+@app.route("/leave_team/<int:team_id>", methods=["POST"])
 def leave_team(team_id):
+    check_csrf()
     users.require_login()
 
     team = teams.get_team_by_id(team_id)
