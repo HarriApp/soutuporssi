@@ -288,12 +288,12 @@ def login():
         session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
 
-@app.route("/add_image", methods=["GET", "POST"])
-def add_image():
+@app.route("/set_profile_image", methods=["GET", "POST"])
+def set_profile_image():
     users.require_login()
 
     if request.method == "GET":
-        return render_template("add_image.html")
+        return render_template("set_profile_image.html")
 
     if request.method == "POST":
         check_csrf()
@@ -301,20 +301,20 @@ def add_image():
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             message = "VIRHE: väärä tiedostomuoto"
-            return render_template("add_image.html", message=message)
+            return render_template("set_profile_image.html", message=message)
         
         image = file.read()
         if len(image) > 1024 * 1024:
             message = "VIRHE: liian suuri kuva"
-            return render_template("add_image.html", message=message)
+            return render_template("set_profile_image.html", message=message)
 
         user_id = session["user_id"]
         users.update_image(user_id, image)
 
         return redirect("/user/" + str(user_id))
 
-@app.route("/show_image/<int:user_id>")
-def show_image(user_id):
+@app.route("/show_profile_image/<int:user_id>")
+def show_profile_image(user_id):
     image = users.get_image(user_id)
     if not image:
         abort(404)
@@ -322,6 +322,14 @@ def show_image(user_id):
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/jpeg")
     return response
+
+@app.route("/remove_profile_image", methods=["POST"])
+def remove_profile_image():
+    users.require_login()
+    check_csrf()
+    user_id = session["user_id"]
+    users.remove_image(user_id)
+    return redirect("/user/" + str(user_id))
 
 @app.route("/logout")
 def logout():

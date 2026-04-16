@@ -74,6 +74,10 @@ def get_image(user_id):
         return None
     return result[0]["image"]
 
+def remove_image(user_id):
+    sql = '''UPDATE users SET image = NULL WHERE id = ?'''
+    db.execute(sql, [user_id])
+
 def require_login():
     if "user_id" not in session:
         abort(403)

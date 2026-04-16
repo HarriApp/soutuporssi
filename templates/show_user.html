@@ -9,13 +9,17 @@
 <body>
   <h1>Käyttäjä {{ user.username }}</h1>
   {% if user.has_image %}
-  <img src="/show_image/{{ user.id }}" alt="Profiilikuva"/>
+  <img src="/show_profile_image/{{ user.id }}" alt="Profiilikuva"/>
   {% endif %}
   {% if session.user_id == user.id %}
   {% if user.has_image %}  
-  <a href="/add_image">Päivitä profiilikuva</a>
+  <a href="/set_profile_image">Päivitä profiilikuva</a>
+  <form action="/remove_profile_image" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" value="Poista profiilikuva" />
+  </form>
   {% else %}
-  <a href="/add_image">Lisää profiilikuva</a>
+  <a href="/set_profile_image">Lisää profiilikuva</a>
   {% endif %}
   {% endif %}
   {% if teams | count > 0 %}
