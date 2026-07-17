@@ -1,7 +1,7 @@
 # Soutupörssi
 Sovelluksessa käyttäjät voivat etsiä miehistöjä kirkkoveneisiinsä sekä ilmoittautua mukaan muiden käyttäjien luomiin joukkueisiin tulevan kesän Sulkavan Suursoutuihin. Ilmoituksessa näkyvät joukkueen nimi, lähtö, jossa joukkue kilpailee, sekä muut käyttäjät, jotka ovat ilmoittautuneet mukaan. Sovellus huolehtii myös siitä, ettei joukkueen enimmäiskoko ylity eikä yksikään käyttäjä päädy samaan lähtöön kahdessa eri joukkueessa.
 
-Sovellus laaditaan periodilla kolme laaditun MVP-verision pohjalta. Tarkoituksena on mahdollistaa tapahtuman kasvu kansainvälisiin mittoihin panosatamalla sovelluksen viimeistelyyn, ulkonäköön ja optiomoimalla sovelluksen rakennetta siten, että se soveltuu suurille käyttäjämäärille.
+Sovellus laaditaan edellisellä periodilla laaditun MVP-verision pohjalta. Tarkoituksena on mahdollistaa tapahtuman kasvu kansainvälisiin mittoihin panosatamalla sovelluksen viimeistelyyn, ulkonäköön ja optiomoimalla sovelluksen rakennetta siten, että se soveltuu suurille käyttäjämäärille.
 
 ## Sovelluksen toiminnot
 
