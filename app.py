@@ -334,6 +334,5 @@ def remove_profile_image():
 @app.route("/logout")
 def logout():
     users.require_login()
-    del session["user_id"]
-    del session["username"]
+    session.clear()
     return redirect("/")
