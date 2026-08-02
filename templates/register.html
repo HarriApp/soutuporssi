@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Rekisteröinti</title>
-</head>
-
-<body>
-  <h1>Soutupörssi</h1>
-  <p>{{ message }}</p>
-  {% if message != "Tunnus luotu" %}
-  <form action="/register" method="post">
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" required minlength="2" 
-      maxlength="20"/>
-    </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password1" required minlength="2" 
-      maxlength="20"/>
-    </p>
-    <p>
-      Salasana uudestaan: <br />
-      <input type="password" name="password2"/>
-    </p>
-    <input type="submit" value="Luo tunnus" />
-  </form>
-  <a href="/">Palaa etusivulle</a>
-  {% else %}
+{% block content %}
+<h2>Rekisteröinti</h2>
+<p>{{ message }}</p>
+{% if message != "Tunnus luotu" %}
+<form action="/register" method="post">
   <p>
-    <a href="/login">Kirjaudu sisään</a> tai <a href="/">palaa etusivulle</a>.
+    Tunnus: <br />
+    <input type="text" name="username" required minlength="2" 
+    maxlength="20"/>
   </p>
-  {% endif %}
-</body>
-
-</html>
+  <p>
+    Salasana: <br />
+    <input type="password" name="password1" required minlength="2" 
+    maxlength="20"/>
+  </p>
+  <p>
+    Salasana uudestaan: <br />
+    <input type="password" name="password2"/>
+  </p>
+  <input type="submit" value="Luo tunnus" />
+</form>
+{% else %}
+<p>
+  <a href="/login">Kirjaudu sisään</a>
+</p>
+{% endif %}
+{% endblock %}

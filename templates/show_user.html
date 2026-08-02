@@ -1,62 +1,52 @@
 <!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Käyttäjä {{ user.username }}</title>
-</head>
+{% block content %}
+<h1>Käyttäjä {{ user.username }}</h1>
+{% if user.has_image %}
+<img src="/show_profile_image/{{ user.id }}" alt="Profiilikuva"/>
+{% endif %}
+{% if session.user_id == user.id %}
+{% if user.has_image %}  
+<a href="/set_profile_image">Päivitä profiilikuva</a>
+<form action="/remove_profile_image" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Poista profiilikuva" />
+</form>
+{% else %}
+<a href="/set_profile_image">Lisää profiilikuva</a>
+{% endif %}
+{% endif %}
+{% if teams | count > 0 %}
+<p>{{ user.username }} toimii kapteenina {{ teams | count }} joukkueessa:</p>
+<ul>
+  {% for team in teams %}
+    <li><a href="/team/{{ team.team_id }}">{{ team.team_name }}</a>
+        ({{ team.serie_name }})</li>
+  {% endfor %}
+</ul>
+{% endif %}
 
-<body>
-  <h1>Käyttäjä {{ user.username }}</h1>
-  {% if user.has_image %}
-  <img src="/show_profile_image/{{ user.id }}" alt="Profiilikuva"/>
-  {% endif %}
-  {% if session.user_id == user.id %}
-  {% if user.has_image %}  
-  <a href="/set_profile_image">Päivitä profiilikuva</a>
-  <form action="/remove_profile_image" method="post">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Poista profiilikuva" />
-  </form>
-  {% else %}
-  <a href="/set_profile_image">Lisää profiilikuva</a>
-  {% endif %}
-  {% endif %}
-  {% if teams | count > 0 %}
-  <p>{{ user.username }} toimii kapteenina {{ teams | count }} joukkueessa:</p>
-  <ul>
-    {% for team in teams %}
-      <li><a href="/team/{{ team.team_id }}">{{ team.team_name }}</a>
-          ({{ team.serie_name }})</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  
-  {% if memberships | count > 0 %}
-  <p>
-    {{ user.username }} on miehistönjäsenenä {{ memberships | count }} 
-    joukkueessa:
-  </p>
-  <ul>
-    {% for membership in memberships %}
-      <li>
-        <a href="/team/{{ membership.team_id }}">
-          {{ membership.team_name }}
-        </a>
-        ({{ membership.serie_name }})
-      </li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+{% if memberships | count > 0 %}
+<p>
+  {{ user.username }} on miehistönjäsenenä {{ memberships | count }} 
+  joukkueessa:
+</p>
+<ul>
+  {% for membership in memberships %}
+    <li>
+      <a href="/team/{{ membership.team_id }}">
+        {{ membership.team_name }}
+      </a>
+      ({{ membership.serie_name }})
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
 
-  {% if teams | count == 0 and memberships | count == 0 %}
-  <p>
-    {{ user.username }} ei ole vielä ilmoittautunut mihinkään joukkueeseen.
-  </p>
-  {% endif %}
-  <p>
-    <a href="/">Takaisin etusivulle</a>
-  </p>
-</body>
-
-</html>
+{% if teams | count == 0 and memberships | count == 0 %}
+<p>
+  {{ user.username }} ei ole vielä ilmoittautunut mihinkään joukkueeseen.
+</p>
+{% endif %}
+{% endblock %}

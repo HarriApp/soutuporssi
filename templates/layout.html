@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Soutupörssi</title>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body>
+  <h1>Soutupörssi</h1>
+
+  <nav>
+    <a href="/">Etusivu</a>
+    <a href="/find_team">Haku</a>
+    {% if session.user_id %}
+    <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+    <a href="/login">Kirjaudu sisään</a>
+    <a href="/register">Luo tunnus</a>
+    {% endif %}
+  </nav>
+
+  {% if session.user_id %}
+  <p>
+    Olet kirjautunut nimellä 
+    <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
+  </p>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+</body>
+
+</html>

@@ -1,48 +1,38 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Uusi ilmoitus</title>
-</head>
-
-<body>
-  <h1>Soutupörssi</h1>
-  <h2>Uusi ilmoitus</h2>
-  <p>{{ message }}</p>
-  <form action="/create_team" method="post">
-    <p>
-      Soutumatka ja -sarja (*): <br />
-      <select name="serie_id" required>
-        {% for serie in series %}
-        <option value="{{ serie.id }}">{{ serie.description }}</option>
-        {% endfor %}
+{% block content %}
+<h2>Uusi ilmoitus</h2>
+<p>{{ message }}</p>
+<form action="/create_team" method="post">
+  <p>
+    Soutumatka ja -sarja (*): <br />
+    <select name="serie_id" required>
+      {% for serie in series %}
+      <option value="{{ serie.id }}">{{ serie.description }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <p>
+    Joukkue (*): <br />
+    <input type="text" name="team_name" required maxlength="50"/>
+  </p>
+  <p>
+    Joukkueen kuvaus: <br />
+    <textarea name="description" rows="8" cols="60"
+    maxlength="480"></textarea>
+  </p>
+  {% for class in classes %}
+  <p>
+    {{ class }}: <br />
+      <select name="{{ class }}">
+        <option value="">(Ei määritetty)</option>
+        {% for option in classes[class] %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}     
       </select>
-    </p>
-    <p>
-      Joukkue (*): <br />
-      <input type="text" name="team_name" required maxlength="50"/>
-    </p>
-    <p>
-      Joukkueen kuvaus: <br />
-      <textarea name="description" rows="8" cols="60"
-      maxlength="480"></textarea>
-    </p>
-    {% for class in classes %}
-    <p>
-      {{ class }}: <br />
-        <select name="{{ class }}">
-          <option value="">(Ei määritetty)</option>
-          {% for option in classes[class] %}
-          <option value="{{ option }}">{{ option }}</option>
-          {% endfor %}     
-        </select>
-    </p>
-    {% endfor %}
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Julkaise ilmoitus" />
-  </form>
-  <a href="/">Takaisin etusivulle</a>
-</body>
-
-</html>
+  </p>
+  {% endfor %}
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Julkaise ilmoitus" />
+</form>
+{% endblock %}

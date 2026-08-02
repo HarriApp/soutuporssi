@@ -1,65 +1,55 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Uusi ilmoitus</title>
-</head>
-
-<body>
-  <h1>Soutupörssi</h1>
-  <h2>Muokkaa ilmoitusta</h2>
-  <p>{{ message }}</p>
-  <form action="/edit_team/{{ team.id }}" method="post">
-    {% if team.crew_list | length > 0 %}
-    <p>Huomio! Joukkueeseen on ilmoittautunut jo soutajia. Jos vaihdat sarjaa,
-      mahdolliset toisessa joukkueessa kyseisessä sarjassa kilpailevat soutajat
-      poistetaan miehistöluettelosta.</p>
-    {% endif %}
-    <p>
-      Soutumatka ja -sarja: <br />
-      <select name="serie_id" required>
-        {% for serie in series %}
-        {% if team.serie_id == serie.id %}
-        <option value="{{ serie.id }}" selected>
-          {{ serie.description }}
-        </option>
+{% block content %}
+<h2>Muokkaa ilmoitusta</h2>
+<p>{{ message }}</p>
+<form action="/edit_team/{{ team.id }}" method="post">
+  {% if team.crew_list | length > 0 %}
+  <p>Huomio! Joukkueeseen on ilmoittautunut jo soutajia. Jos vaihdat sarjaa,
+    mahdolliset toisessa joukkueessa kyseisessä sarjassa kilpailevat soutajat
+    poistetaan miehistöluettelosta.</p>
+  {% endif %}
+  <p>
+    Soutumatka ja -sarja: <br />
+    <select name="serie_id" required>
+      {% for serie in series %}
+      {% if team.serie_id == serie.id %}
+      <option value="{{ serie.id }}" selected>
+        {{ serie.description }}
+      </option>
+      {% else %}
+      <option value="{{ serie.id }}">{{ serie.description }}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </p>
+  <p>
+    Joukkue: <br />
+    <input type="text" name="team_name" value="{{ team.name }}"
+      required maxlength="50"/>
+  </p>
+  <p>
+    Joukkueen kuvaus: <br />
+    <textarea name="description" rows="8" cols="60"
+      maxlength="480">{{ team.description }}</textarea>
+  </p>
+  {% for class in classes %}
+  <p>
+    {{ class }}: <br />
+      <select name="{{ class }}">
+        <option value="">(Ei määritetty)</option>
+        {% for option in classes[class] %}
+        {% if team.classes and team.classes.get(class) == option %}
+        <option value="{{ option }}" selected>{{ option }}</option>
         {% else %}
-        <option value="{{ serie.id }}">{{ serie.description }}</option>
+        <option value="{{ option }}">{{ option }}</option>
         {% endif %}
-        {% endfor %}
+        {% endfor %}     
       </select>
-    </p>
-    <p>
-      Joukkue: <br />
-      <input type="text" name="team_name" value="{{ team.name }}"
-       required maxlength="50"/>
-    </p>
-    <p>
-      Joukkueen kuvaus: <br />
-      <textarea name="description" rows="8" cols="60"
-       maxlength="480">{{ team.description }}</textarea>
-    </p>
-    {% for class in classes %}
-    <p>
-      {{ class }}: <br />
-        <select name="{{ class }}">
-          <option value="">(Ei määritetty)</option>
-          {% for option in classes[class] %}
-          {% if team.classes and team.classes.get(class) == option %}
-          <option value="{{ option }}" selected>{{ option }}</option>
-          {% else %}
-          <option value="{{ option }}">{{ option }}</option>
-          {% endif %}
-          {% endfor %}     
-        </select>
-    </p>
-    {% endfor %}
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Päivitä ilmoitus" />
-    <input type="submit" name="cancel" value="Peruuta" /> 
-  </form>
-  <a href="/">Takaisin etusivulle</a>
-</body>
-
-</html>
+  </p>
+  {% endfor %}
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Päivitä ilmoitus" />
+  <input type="submit" name="cancel" value="Peruuta" /> 
+</form>
+{% endblock %}

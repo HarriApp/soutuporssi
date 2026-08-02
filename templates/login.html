@@ -1,38 +1,30 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Kirjautuminen</title>
-</head>
-
-<body>
-  <h1>Soutupörssi</h1>
-  {% if session.username %}
+{% block content %}
+<h2>Kirjautuminen</h2>
+{% if session.username %}
+<p>
+  Olet kirjautunut nimellä {{ session.username }}
+</p>
+<p>
+  <a href="/logout">Kirjaudu ulos</a>
+</p>
+{% else %}
+<p>{{ message }}</p>
+<form action="/login" method="post">
   <p>
-    Olet kirjautunut nimellä {{ session.username }}
+    Tunnus: <br />
+    <input type="text" name="username" />
   </p>
   <p>
-    <a href="/logout">Kirjaudu ulos</a>
+    Salasana: <br />
+    <input type="password" name="password" />
   </p>
-  {% else %}
-  <p>{{ message }}</p>
-  <form action="/login" method="post">
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
-    <input type="submit" name="cancel" value="Peruuta" /> 
-  </form>
-  <p>
-    Eikö sinulla ole tunnusta? Voit luoda sen <a href="/register">tästä</a>.
-  </p>
-  {% endif %}
-</body>
-
-</html>
+  <input type="submit" value="Kirjaudu" />
+  <input type="submit" name="cancel" value="Peruuta" /> 
+</form>
+<p>
+  Eikö sinulla ole tunnusta? Voit luoda sen <a href="/register">tästä</a>.
+</p>
+{% endif %}
+{% endblock %}

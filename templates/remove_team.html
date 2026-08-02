@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Poista joukkue</title>
-</head>
-
-<body>
-  <h1>Soutupörssi</h1>
-  <h2>Poista joukkue</h2>
-  <form action="/remove_team/{{ team.id }}" method="post">
-    <p>
-      Haluatko varmasti poistaa joukkueen <i>{{ team.name }}</i> lähdöstä <i>
-      {{ team.serie_description }}</i>?<br />
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="cancel" value="Peruuta" /> 
-    <input type="submit" name="remove" value="Poista joukkue" />
-  </form>
-  <a href="/">Takaisin etusivulle</a>
-</body>
-
-</html>
+{% block content %}
+<h2>Poista joukkue</h2>
+<form action="/remove_team/{{ team.id }}" method="post">
+  <p>
+    Haluatko varmasti poistaa joukkueen <i>{{ team.name }}</i> lähdöstä <i>
+    {{ team.serie_description }}</i>?<br />
+  </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" name="cancel" value="Peruuta" /> 
+  <input type="submit" name="remove" value="Poista joukkue" />
+</form>
+{% endblock %}

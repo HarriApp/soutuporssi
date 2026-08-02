@@ -1,42 +1,19 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Soutupörssi</title>
-</head>
-
-<body>
-  <h1>Soutupörssi</h1>
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä 
-    <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
-  </p>
-  <p>
-    <a href="/create_team">Kokoa joukkue</a>
-    <a href="/find_team">Haku</a>  
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-  <p>
-    <a href="/find_team">Haku</a> 
-    <a href="/login">Kirjaudu sisään</a>
-    <a href="/register">Luo tunnus</a>
-  </p>
-  {% endif %}
-  <h2>Joukkueet</h2>
-  <ul>
-    {% for team in teams %}
-    <li>
-      <a href="/team/{{ team.id }}">{{ team.name }}</a> 
-      sarjassa {{ team.description }}
-    </li>
-    {% endfor %}
-  </ul>
-  {% if not teams %}
-  <p>Ei vielä yhtään joukkuetta</p>
-  {% endif %}
-</body>
-
-</html>
+{% block content %}
+<h2>Joukkueet</h2>
+<ul>
+  {% for team in teams %}
+  <li>
+    <a href="/team/{{ team.id }}">{{ team.name }}</a> 
+    sarjassa {{ team.description }}
+  </li>
+  {% endfor %}
+</ul>
+{% if not teams %}
+<p>Ei vielä yhtään joukkuetta</p>
+{% endif %}
+{% if session.username %}
+<a href="/create_team">Kokoa uusi joukkue</a>
+{% endif %}
+{% endblock %}
