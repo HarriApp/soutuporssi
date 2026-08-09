@@ -1,7 +1,7 @@
 import secrets
-from flask import abort, make_response, render_template, request, redirect, \
-                  session
 from flask import Flask
+from flask import abort, flash, make_response, render_template, request, \
+                  redirect, session
 import config
 import teams
 import users
@@ -38,7 +38,7 @@ def create_team():
     classes = teams.get_all_classes()
 
     if request.method == "GET":
-        return render_template("create_team.html", message="", classes=classes,
+        return render_template("create_team.html", classes=classes,
                                series=series)
 
     if request.method == "POST":
@@ -52,15 +52,16 @@ def create_team():
             abort(403)
 
         if users.is_in_serie(captain, serie_id):
-            message = "VIRHE: Olet jo mukana sarjassa " + \
-            teams.get_serie_description(serie_id) + ". Valitse toinen sarja."
-            return render_template("create_team.html", message=message,
-                                   classes=classes, series=series)
+            flash("VIRHE: Olet jo mukana sarjassa " + \
+                  teams.get_serie_description(serie_id) + \
+                  ". Valitse toinen sarja.")
+            return render_template("create_team.html", classes=classes,
+                                   series=series)
 
         if not teams.is_name_available(team_name, serie_id):
-            message = "VIRHE: Joukkueen nimi on jo varattu tässä sarjassa"
-            return render_template("create_team.html", message=message,
-                                   classes=classes, series=series)
+            flash("VIRHE: Joukkueen nimi on jo varattu tässä sarjassa")
+            return render_template("create_team.html", classes=classes,
+                                   series=series)
 
         team_classes = []
         all_classes = teams.get_all_classes()
@@ -102,8 +103,8 @@ def edit_team(team_id):
     if request.method == "GET":
         series = teams.get_series()
         classes = teams.get_all_classes()
-        return render_template("edit_team.html", team=team, message="",
-                               classes=classes, series=series)
+        return render_template("edit_team.html", team=team, classes=classes,
+                               series=series)
 
     if request.method == "POST":
         check_csrf()
@@ -123,26 +124,24 @@ def edit_team(team_id):
         serie_changed = new_serie_id != team.serie_id
         if serie_changed and users.is_in_serie(session["user_id"],
                                                new_serie_id):
-            message = "VIRHE: Olet jo mukana sarjassa. Valitse toinen sarja."
+            flash("VIRHE: Olet jo mukana sarjassa. Valitse toinen sarja.")
             team.serie_id = new_serie_id
             team.description = new_description
             series = teams.get_series()
             classes = teams.get_all_classes()
-            return render_template("edit_team.html", team=team,
-                                   message=message, series=series,
+            return render_template("edit_team.html", team=team, series=series,
                                    classes=classes)
 
         name_or_serie_changed = new_name != team.name or serie_changed
 
         if name_or_serie_changed and not \
             teams.is_name_available(new_name, new_serie_id):
-            message = f"VIRHE: Nimi {new_name} on jo käytössä tässä sarjassa"
+            flash(f"VIRHE: Nimi {new_name} on jo käytössä tässä sarjassa")
             team.serie_id = new_serie_id
             team.description = new_description
             series = teams.get_series()
             classes = teams.get_all_classes()
-            return render_template("edit_team.html", team=team,
-                                   message=message, series=series,
+            return render_template("edit_team.html", team=team, series=series,
                                    classes=classes)
 
         if serie_changed:
@@ -239,7 +238,7 @@ def remove_team(team_id):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html", message="")
+        return render_template("register.html")
 
     if request.method == "POST":
         username = request.form["username"].strip()
@@ -247,24 +246,24 @@ def register():
         password2 = request.form["password2"]
 
         if len(username) < 2:
-            message = "VIRHE: Tunnuksen vähimmäispituus on kaksi merkkiä. "
-            message += "Tyhjää tilaa tunnksen alussa ja lopussa ei huomioida."
-            return render_template("register.html", message=message)
+            flash("VIRHE: Tunnuksen vähimmäispituus on kaksi merkkiä. " + 
+                  "Tyhjää tilaa tunnksen alussa ja lopussa ei huomioida.")
+            return render_template("register.html")
 
         if len(username) > 20:
             abort(403)
 
         if not users.is_username_available(username):
-            message = "VIRHE: Tunnus on jo varattu. Yritä uudelleen."
-            return render_template("register.html", message=message)
+            flash("VIRHE: Tunnus on jo varattu. Yritä uudelleen.")
+            return render_template("register.html")
 
         if password1 != password2:
-            message = "VIRHE: salasanat eivät ole samat. Yritä uudelleen."
-            return render_template("register.html", message=message)
+            flash("VIRHE: salasanat eivät ole samat. Yritä uudelleen.")
+            return render_template("register.html")
 
         users.register(username, password1)
-        message = "Tunnus luotu"
-        return render_template("register.html", message=message)
+        flash("Tunnus luotu. Voit nyt kirjautua sisään.")
+        return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -280,8 +279,8 @@ def login():
         user_id = users.login(username, password)
 
         if not user_id:
-            message = "VIRHE: Virheellinen tunnus tai salasana"
-            return render_template("login.html", message=message)
+            flash("VIRHE: Virheellinen tunnus tai salasana")
+            return render_template("login.html")
 
         session["user_id"] = user_id
         session["username"] = username
@@ -300,13 +299,13 @@ def set_profile_image():
 
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
-            message = "VIRHE: väärä tiedostomuoto"
-            return render_template("set_profile_image.html", message=message)
+            flash("VIRHE: väärä tiedostomuoto")
+            return render_template("set_profile_image.html")
         
         image = file.read()
         if len(image) > 1024 * 1024:
-            message = "VIRHE: liian suuri kuva"
-            return render_template("set_profile_image.html", message=message)
+            flash("VIRHE: liian suuri kuva")
+            return render_template("set_profile_image.html")
 
         user_id = session["user_id"]
         users.update_image(user_id, image)

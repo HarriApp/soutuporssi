@@ -4,3 +4,16 @@ body {
   font-family: sans-serif;
   background-color: lightblue;
 }
+
+.flash-message {
+  border: 2px solid black;
+  margin: 1em;
+  padding: 0.5em;
+  background-color: blue;
+  color: white;
+}
+
+.guidance-text {
+  font-size: 0.8em;
+  color: gray;
+}

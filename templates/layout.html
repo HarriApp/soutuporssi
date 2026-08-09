@@ -27,6 +27,12 @@
   </p>
   {% endif %}
 
+  {% for message in get_flashed_messages() %}
+  <div class="flash-message">
+    <p>{{ message }}</p>
+  </div>
+  {% endfor %}
+
   {% block content %}{% endblock %}
 </body>
 

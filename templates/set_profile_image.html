@@ -2,7 +2,6 @@
 
 {% block content %}
 <h2>Päivitä profiilikuva</h2>
-<p>{{ message }}</p>
 {% if session.username %}
 <form action="/set_profile_image" method="post" enctype="multipart/form-data">
   <p>

@@ -2,8 +2,6 @@
 
 {% block content %}
 <h2>Rekisteröinti</h2>
-<p>{{ message }}</p>
-{% if message != "Tunnus luotu" %}
 <form action="/register" method="post">
   <p>
     Tunnus: <br />
@@ -21,9 +19,4 @@
   </p>
   <input type="submit" value="Luo tunnus" />
 </form>
-{% else %}
-<p>
-  <a href="/login">Kirjaudu sisään</a>
-</p>
-{% endif %}
 {% endblock %}
