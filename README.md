@@ -28,7 +28,13 @@ $ sqlite3 database.db < schema.sql
 $ sqlite3 database.db < init.sql
 ```
 
-Vaihda tiedostossa config.py oleva kehityksen aikainen salainen.
+Vaihda tiedostoon config.py sijoitetun secret_key-muuttujan arvo. Voit halutessasi generoida oman uuden salaisen avaimen Python-tulkin avulla seuraavasti:
+
+```
+$ python3
+>>> import secrets
+>>> secrets.token_hex(16)
+```
 
 Voit käynnistää sovelluksen näin:
 
