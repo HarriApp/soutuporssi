@@ -137,7 +137,8 @@ def edit_team(team_id):
             team.description = new_description
             series = teams.get_series()
             classes = teams.get_all_classes()
-            return render_template("edit_team.html", team =team, series=series,
+            return render_template("edit_team.html", team = team,
+                                   series = series,
                                    classes = classes)
 
         name_or_serie_changed = new_name != team.name or serie_changed
