@@ -7,18 +7,21 @@
     Soutumatka ja -sarja (*): <br />
     <select name="serie_id" required>
       {% for serie in series %}
+      {% if serie.id == serie_id %}
+      <option value="{{ serie.id }}" selected>{{ serie.description }}</option>
+      {% else %}
       <option value="{{ serie.id }}">{{ serie.description }}</option>
+      {% endif %}
       {% endfor %}
     </select>
   </p>
   <p>
     Joukkue (*): <br />
-    <input type="text" name="team_name" required maxlength="50"/>
+    <input type="text" name="team_name" value="{{ team_name }}" required minlength="1" maxlength="50"/>
   </p>
   <p>
     Joukkueen kuvaus: <br />
-    <textarea name="description" rows="8" cols="60"
-    maxlength="480"></textarea>
+    <textarea name="description" rows="8" cols="60" maxlength="480">{{ description }}</textarea>
   </p>
   {% for class in classes %}
   <p>
@@ -26,7 +29,17 @@
       <select name="{{ class }}">
         <option value="">(Ei määritetty)</option>
         {% for option in classes[class] %}
+        {% if team_classes %}
+          {% for team_class in team_classes %}
+            {% if team_class[0] == class and team_class[1] == option %}
+              <option value="{{ option }}" selected>{{ option }}</option>
+            {% else %}
+              <option value="{{ option }}">{{ option }}</option>
+            {% endif %}
+          {% endfor %}
+        {% else %}
         <option value="{{ option }}">{{ option }}</option>
+        {% endif %}
         {% endfor %}     
       </select>
   </p>

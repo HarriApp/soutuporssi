@@ -48,21 +48,6 @@ def create_team():
         description = request.form["description"].strip()
         captain = session["user_id"]
 
-        if len(team_name) < 1 or len(team_name) > 50 or len(description) > 480:
-            abort(403)
-
-        if users.is_in_serie(captain, serie_id):
-            flash("VIRHE: Olet jo mukana sarjassa " + \
-                  teams.get_serie_description(serie_id) + \
-                  ". Valitse toinen sarja.")
-            return render_template("create_team.html", classes=classes,
-                                   series=series)
-
-        if not teams.is_name_available(team_name, serie_id):
-            flash("VIRHE: Joukkueen nimi on jo varattu tässä sarjassa")
-            return render_template("create_team.html", classes=classes,
-                                   series=series)
-
         team_classes = []
         all_classes = teams.get_all_classes()
         for title in all_classes:
@@ -71,6 +56,27 @@ def create_team():
                 if value not in all_classes[title]:
                     abort(403)
                 team_classes.append((title, value))
+
+        if len(team_name) < 1 or len(team_name) > 50 or len(description) > 480:
+            abort(403)
+
+        if users.is_in_serie(captain, serie_id):
+            flash("VIRHE: Olet jo mukana sarjassa " + \
+                  teams.get_serie_description(serie_id) + \
+                  ". Valitse toinen sarja.")
+            return render_template("create_team.html", serie_id = serie_id,
+                                   team_name = team_name, 
+                                   description = description,
+                                   classes=classes, 
+                                   team_classes=team_classes , series=series)
+
+        if not teams.is_name_available(team_name, serie_id):
+            flash("VIRHE: Joukkueen nimi on jo varattu tässä sarjassa")
+            return render_template("create_team.html", serie_id = serie_id,
+                                   team_name = team_name, 
+                                   description = description,
+                                   classes=classes, 
+                                   team_classes=team_classes , series=series)
 
         teams.create_team(team_name, captain, serie_id, description,
                           team_classes)

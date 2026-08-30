@@ -5,6 +5,10 @@ body {
   background-color: lightblue;
 }
 
+form {
+  padding-bottom: 0.5em;
+}
+
 .flash-message {
   border: 2px solid black;
   margin: 1em;
