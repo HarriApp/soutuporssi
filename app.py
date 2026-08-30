@@ -67,16 +67,18 @@ def create_team():
             return render_template("create_team.html", serie_id = serie_id,
                                    team_name = team_name, 
                                    description = description,
-                                   classes=classes, 
-                                   team_classes=team_classes , series=series)
+                                   classes = classes, 
+                                   team_classes = team_classes,
+                                   series = series)
 
         if not teams.is_name_available(team_name, serie_id):
             flash("VIRHE: Joukkueen nimi on jo varattu tässä sarjassa")
             return render_template("create_team.html", serie_id = serie_id,
                                    team_name = team_name, 
                                    description = description,
-                                   classes=classes, 
-                                   team_classes=team_classes , series=series)
+                                   classes = classes, 
+                                   team_classes = team_classes,
+                                   series = series)
 
         teams.create_team(team_name, captain, serie_id, description,
                           team_classes)
@@ -96,7 +98,7 @@ def show_team(team_id):
         team.is_user_member = False
         team.is_user_in_serie = False
 
-    return render_template("show_team.html", team=team)
+    return render_template("show_team.html", team = team)
 
 @app.route("/edit_team/<int:team_id>", methods=["GET", "POST"])
 def edit_team(team_id):
@@ -109,8 +111,8 @@ def edit_team(team_id):
     if request.method == "GET":
         series = teams.get_series()
         classes = teams.get_all_classes()
-        return render_template("edit_team.html", team=team, classes=classes,
-                               series=series)
+        return render_template("edit_team.html", team = team,
+                               classes = classes, series=series)
 
     if request.method == "POST":
         check_csrf()
@@ -135,8 +137,8 @@ def edit_team(team_id):
             team.description = new_description
             series = teams.get_series()
             classes = teams.get_all_classes()
-            return render_template("edit_team.html", team=team, series=series,
-                                   classes=classes)
+            return render_template("edit_team.html", team =team, series=series,
+                                   classes = classes)
 
         name_or_serie_changed = new_name != team.name or serie_changed
 
@@ -147,8 +149,8 @@ def edit_team(team_id):
             team.description = new_description
             series = teams.get_series()
             classes = teams.get_all_classes()
-            return render_template("edit_team.html", team=team, series=series,
-                                   classes=classes)
+            return render_template("edit_team.html", team = team,
+                                   series = series, classes = classes)
 
         if serie_changed:
             for member_user_id, member_user_name in team.crew_list:
@@ -176,7 +178,7 @@ def find_team():
     else:
         results = []
         query = ""
-    return render_template("find_team.html", query=query, results=results)
+    return render_template("find_team.html", query = query, results = results)
 
 @app.route("/join_team/<int:team_id>", methods=["POST"])
 def join_team(team_id):
@@ -229,7 +231,7 @@ def remove_team(team_id):
         abort(404)
 
     if request.method == "GET":
-        return render_template("remove_team.html", team=team)
+        return render_template("remove_team.html", team = team)
 
     if request.method == "POST":
         check_csrf()
@@ -254,18 +256,28 @@ def register():
         if len(username) < 2:
             flash("VIRHE: Tunnuksen vähimmäispituus on kaksi merkkiä. " + 
                   "Tyhjää tilaa tunnksen alussa ja lopussa ei huomioida.")
-            return render_template("register.html")
+            return render_template("register.html", username = username,
+                                   password1 = password1,
+                                   password2 = password2)
 
         if len(username) > 20:
-            abort(403)
+            flash("VIRHE: Tunnuksen enimmäispituus on 20 merkkiä. " + 
+                  "Tyhjää tilaa tunnksen alussa ja lopussa ei huomioida.")
+            return render_template("register.html", username = username,
+                                   password1 = password1,
+                                   password2 = password2)
 
         if not users.is_username_available(username):
             flash("VIRHE: Tunnus on jo varattu. Yritä uudelleen.")
-            return render_template("register.html")
+            return render_template("register.html", username = username,
+                                   password1 = password1,
+                                   password2 = password2)
 
         if password1 != password2:
             flash("VIRHE: salasanat eivät ole samat. Yritä uudelleen.")
-            return render_template("register.html")
+            return render_template("register.html", username = username,
+                                   password1 = password1,
+                                   password2 = password2)
 
         users.register(username, password1)
         flash("Tunnus luotu. Voit nyt kirjautua sisään.")
@@ -274,7 +286,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html", message="")
+        return render_template("login.html")
 
     if request.method == "POST":
         if "cancel" in request.form:
@@ -286,7 +298,8 @@ def login():
 
         if not user_id:
             flash("VIRHE: Virheellinen tunnus tai salasana")
-            return render_template("login.html")
+            return render_template("login.html", username = username, 
+                                   password = password)
 
         session["user_id"] = user_id
         session["username"] = username
